@@ -1,0 +1,41 @@
+.MyPage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  .MyTitle {
+    z-index: 999; /* 保证标题位于其他元素之上 */
+    position: relative;
+    top: 0;
+    width: 100%;
+    background-color: $color-primary;
+    height: 80px;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .title-left {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+    .title-content {
+      color: $color-text-in-brand;
+      flex: 1;
+      text-align: center;
+    }
+    .title-right {
+      position: absolute;
+      right: 0;
+    }
+  }
+  .MyContent {
+    position: relative;
+    overflow: auto;
+    flex: 1;
+  }
+}

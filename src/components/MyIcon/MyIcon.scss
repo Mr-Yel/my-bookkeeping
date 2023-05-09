@@ -1,0 +1,49 @@
+.MyNavbar {
+  .title {
+    background-color: $color-primary;
+    height: 80px;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .title-left {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+    .title-content {
+      flex: 1;
+      text-align: center;
+    }
+    .title-right {
+      position: absolute;
+      right: 0;
+    }
+  }
+  .custom-plate {
+    height: 400px;
+    position: relative;
+    .custom-plate-bg {
+      background-color: $color-primary;
+      display: flex;
+      justify-content: center;
+      height: 200px;
+      border-radius: 0 0 100px 100px / 0 0 30px 30px;
+    }
+    .custom-plate-content {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 80%;
+      height: 300px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba($color: #000000, $alpha: 0.1);
+    }
+  }
+}

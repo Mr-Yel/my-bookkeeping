@@ -1,0 +1,41 @@
+.BillsDateCard {
+  margin: 24px;
+  background-color: $color-bg-content-s;
+  .bill-card-title {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    color: $color-text-primary-s;
+    .sumUp {
+      flex: 1;
+      text-align: right;
+    }
+  }
+  .bill-card-item {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    .bill-card-icon {
+      background-color: $color-primary;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $color-text-in-brand;
+      font-size: 42px;
+    }
+    .bill-card-name {
+      padding: 0 24px;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      .bill-card-type-name,.bill-card-notes {
+        @include  mul-text-truncate(1)
+      }
+    }
+  }
+}

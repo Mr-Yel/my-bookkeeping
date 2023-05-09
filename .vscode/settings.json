@@ -1,0 +1,10 @@
+{
+  "emmet.preferences": {
+    "html": {
+      "attr_quotes": "single"
+    }
+  },
+  "prettier.semi": false, // 分号
+  "prettier.singleQuote": true, // 单引号
+  "prettier.trailingComma": "none" // 去掉结尾的逗号
+}

@@ -1,0 +1,52 @@
+.CustomSoftKeyboard {
+  background-color: $color-primary;
+  border-top: 1px transparent solid;
+  .keyboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $color-bg-element;
+    margin: 12px;
+    padding: 12px 0;
+    border-radius: 12px;
+    .keyboard-note {
+      flex: 1;
+      padding-left: 12px;
+    }
+    .keyboard-amount {
+      padding: 0 12px 0 24px;
+      display: flex;
+      flex-direction: column;
+      .keyboard-amount-operation {
+        color: red;
+        font-size: 24px;
+      }
+      .keyboard-amount-res {
+        text-align: right;
+      }
+    }
+  }
+  .keyboard-content {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 6px;
+    .keyboard-content-item {
+      box-sizing: border-box;
+      // padding: 32px;
+      .keyboard-content-button {
+        height: 80px;
+        background-color: $color-bg-element;
+        margin: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border-radius: 12px;
+      }
+    }
+    .isComplete .keyboard-content-button {
+      background-color: $color-primary-active;
+      color: $color-text-in-brand;
+    }
+  }
+}

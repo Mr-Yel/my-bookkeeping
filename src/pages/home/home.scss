@@ -1,0 +1,60 @@
+.Home {
+  position: relative;
+  .MyContent {
+    padding-top: 24px;
+  }
+  .bills-title-bg {
+    position: absolute;
+    top: 0;
+    background-color: $color-primary;
+    display: flex;
+    justify-content: center;
+    height: 200px;
+    width: 100%;
+    border-radius: 0 0 100px 100px / 0 0 30px 30px;
+  }
+  .bills-title {
+    position: relative;
+    margin: auto;
+    width: 80%;
+    height: 300px;
+    background-color: #fff;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 0 20px rgba($color: #000000, $alpha: 0.1);
+  }
+  .take-bill {
+    background-color: $color-primary;
+    padding: 12px 24px;
+    border-radius: 36px;
+    color: #fff;
+    position: fixed;
+    bottom: 36px;
+    right: 36px;
+  }
+  .tabs {
+    position: sticky;
+    top: -24px;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    background-color: $color-bg-content-s;
+    .time-range {
+      flex: 1;
+      text-align: right;
+    }
+    .tabs-item {
+      padding: 6px 18px;
+    }
+    .tabs-item.active {
+      background-color: $color-primary;
+      border-radius: 36px;
+      color: $color-text-in-brand;
+    }
+    
+  }
+  .bills-list {
+    
+  }
+}

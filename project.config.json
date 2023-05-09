@@ -1,0 +1,36 @@
+{
+  "miniprogramRoot": "dist/",
+  "cloudfunctionRoot": "cloud/",
+  "cloudbaseRoot": "cloud/",
+  "projectname": "my-bookkeeping",
+  "description": "记账小程序",
+  "appid": "wx7e0ba4d0acd5818d",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "enhance": false,
+    "compileHotReLoad": false,
+    "postcss": false,
+    "minified": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "ignoreUploadUnusedFiles": false,
+    "condition": false
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.30.2",
+  "srcMiniprogramRoot": "dist/",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  },
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
+}

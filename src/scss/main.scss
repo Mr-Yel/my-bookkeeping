@@ -1,0 +1,31 @@
+@font-face {
+	font-family: LXGW;
+	src: url('https://static.netdun.net/sc/Fomalhaut/霞鹜文楷.woff2');
+	font-display: swap;
+}
+
+view {
+	font-family: LXGW;
+}
+
+@import 
+
+"./font/iconfont.scss",
+
+// mixin
+"./base/reset.scss",
+"./base/setting.scss", 
+"./base/mixin.scss",
+"./base/defaults.scss",
+
+// components
+"../components//MyPage/MyPage.scss",
+"../components//MyNavbar/MyNavbar.scss",
+"../components//CustomSoftKeyboard/CustomSoftKeyboard.scss",
+"../components//BillsDateCard/BillsDateCard.scss",
+
+// pages
+"../pages//home/home.scss",
+"../pages//user/user.scss",
+"../pages//userInfoEdit/userInfoEdit.scss",
+"../pages//addBill/addBill.scss";

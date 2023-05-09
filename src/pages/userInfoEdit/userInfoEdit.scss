@@ -1,0 +1,95 @@
+.userInfoEdit {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  .edit {
+    .edit-item {
+      background-color: #fff;
+      border-bottom: 1px solid #DDDDDD;
+      border-top: 1px solid #DDDDDD;
+      font-size: 32px;
+      color: #222222;
+      line-height: 48px;
+      padding: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .user_image {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .image {
+        width: 100px;
+        height: 100px;
+        border-radius: 12px;
+      }
+      .button {
+        width: 100px;
+        height: 100px;
+        padding:0 20px;
+        margin: auto;
+        background-size: 100px 100px;
+        background-repeat:no-repeat;
+        border:none;
+      }
+      .button::after{
+        border: none;
+      }
+    }
+  }
+  .mark-edit-name {
+    .mark {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color: #000000, $alpha: 0.3);
+    }
+    .mark-edit-name-content {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 2;
+      background-color: #fff;
+      margin: 300px 30px;
+    }
+    .mark-edit-name-title {
+      text-align: center;
+      background-color: #DDDDDD;
+      padding: 12px;
+    }
+    .mark-edit-name-input {
+      position: relative;
+      padding: 18px 36px;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 16px;
+        left: 36px;
+        background-color: green;
+        width: calc(100% - 72px);
+        height: 3px;
+      }
+    }
+    .mark-edit-name-box {
+      padding: 0 36px 18px;
+      text-align: right;
+      Text {
+        padding-right: 20px;
+      }
+      .mark-edit-name-sure {
+        color: rgb(3, 116, 3)
+      }
+    }
+  }
+}

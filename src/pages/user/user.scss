@@ -1,0 +1,32 @@
+.User { 
+  .header {
+    background-color: $color-primary;
+    display: flex;
+    justify-content: center;
+    height: 200px;
+    border-radius: 0 0 100px 100px / 0 0 30px 30px;
+    .header-box {
+      margin-top: 50px;
+      width: 80%;
+      height: 300px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba($color: #000000, $alpha: 0.1);
+    }
+   
+  }
+  .user-bar {
+    padding: 36px 36px 0;
+    display: flex;
+    align-items: center;
+  }
+  .user_image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+  }
+  .user_name {
+    padding-left: 24px;
+    display: inline-block;
+  }
+}

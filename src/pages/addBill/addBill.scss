@@ -1,0 +1,52 @@
+.addBill {
+  width: 100%;
+  height: 100%;
+  background-color: $color-bg-disable;
+  .tabs {
+    display: flex;
+    background-color: $color-primary;
+    color: $color-text-in-brand;
+    .tabs-item {
+      padding: 12px 24px;
+    }
+  }
+  .content {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 500px;
+    .amount-type-item {
+      width: 20%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 28px;
+      padding-top: 32px;
+      .amount-type-icon {
+        width: 100px;
+        height: 100px;
+        background-color: $color-bg-element;
+        color: $color-text-primary;
+        display: block;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        &.active {
+          color: $color-text-in-brand;
+        }
+      }
+      .amount-type-name {
+        text-align: center;
+        padding: 2%;
+        width: 96%;
+      }
+    }
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+}
