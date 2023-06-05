@@ -13,7 +13,8 @@ module.exports = {
     "@/components" : path.resolve(__dirname, '..', 'src/components'),
     "@/store" : path.resolve(__dirname, '..', 'src/store'),
     "@/style" : path.resolve(__dirname, '..', 'src/style'),
-    "@/service" : path.resolve(__dirname, '..', 'src/service')
+    "@/service" : path.resolve(__dirname, '..', 'src/service'),
+    "@" : path.resolve(__dirname, '..', 'src')
   },
   mini: {},
   h5: {

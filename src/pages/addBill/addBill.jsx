@@ -101,8 +101,8 @@ export default class addBill extends Component {
       notes: data && data.notes || '',
       amount: data && data.amount || 0,
       bill_type_id: this.curBillType._id,
-      date_time: dayjs().format("YYYYMMDDHHmmss"),
-      from_book: '00d42a4c641bc93f0007931a2353b255', // TODO 账本
+      date_time: dayjs(data.date + data.time).format("YYYYMMDDHHmmss"),
+      from_book: data.accountBook && data.accountBook._id, // TODO 账本
       note_taker: userInfo && userInfo._id,
     }
     const res = await BillStore.editBill(params)
@@ -123,6 +123,7 @@ export default class addBill extends Component {
     return (
       <View className='addBill'>
         <MyPage
+          canGoBack
           titleContent='我的'
         >
           {tabs}

@@ -1,0 +1,16 @@
+.MyPopUp {
+  .MyPopUp_container {
+    .layout-header {
+      position: relative;
+      padding: 30px 0;
+      text-align: center;
+      .close-img {
+          position: absolute;
+          right: 28px;
+          top: 36px;
+          width: 36px;
+          height: 36px;
+      }
+    }
+  }
+}

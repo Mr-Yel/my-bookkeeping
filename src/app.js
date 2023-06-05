@@ -3,12 +3,14 @@ import { Component } from 'react'
 import { Provider } from "mobx-react";
 import BillStore from "./stores/BillStore";
 import UserStore from "./stores/UserStore";
+import AccountStore from "./stores/AccountStore";
 import { MyIcon } from "./components";
 import "./app.scss";
 
 const stores = {
   BillStore,
-  UserStore
+  UserStore,
+  AccountStore,
 };
 
 class App extends Component {

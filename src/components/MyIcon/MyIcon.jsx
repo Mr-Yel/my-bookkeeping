@@ -16,7 +16,7 @@ export default class MyIcon extends Component {
     const { prefix='icon-', name } = this.props
     const iconName = this.nameTransform(name)
     return (
-      <Text className={`MyIcon iconfont ${prefix}${iconName}`}></Text>
+      <Text className={`MyIcon iconfont ${prefix}${iconName} ${iconName}`}></Text>
     )
   }
 }

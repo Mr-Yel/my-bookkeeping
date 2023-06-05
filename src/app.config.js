@@ -5,6 +5,8 @@ export default defineAppConfig({
     'pages/user/user',
     'pages/userInfoEdit/userInfoEdit',
     'pages/addBill/addBill',
+    'pages/account/account',
+    'pages/addAccount/addAccount',
   ],
   window: {
     backgroundTextStyle: 'light',
@@ -23,6 +25,11 @@ export default defineAppConfig({
       iconPath: "./assets/tab-bar/home.png",
       selectedIconPath: "./assets/tab-bar/home-active.png",
       text: "首页"
+    }, {
+      pagePath: "pages/account/account",
+      iconPath: "./assets/tab-bar/property.png",
+      selectedIconPath: "./assets/tab-bar/property-active.png",
+      text: "账户"
     }, {
       pagePath: "pages/user/user",
       iconPath: "./assets/tab-bar/user.png",

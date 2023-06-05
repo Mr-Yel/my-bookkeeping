@@ -1,22 +1,28 @@
+import dayjs from 'dayjs'
 import { Component } from 'react'
-import { View, Input, Text } from '@tarojs/components'
+import { View, Input, Text, ScrollView } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
-import { getNumber, checkString } from '../../utils'
-import { routerGoBack } from '../../utils/router'
+import { MyIcon } from '@/components'
+import { getNumber, checkString } from '@/utils'
+import { routerGoBack } from '@/utils/router'
 import getKeyboardBtnCrt from './keyboardBtnCrt'
-import { MyIcon } from '../index'
+import SelectButtonBox from './components/SelectButtonBox'
 
 @inject('BillStore', 'UserStore')
 @observer
-export default class MyNavbar extends Component {
+export default class CustomSoftKeyboard extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      operationString: '',
-      curOperator: '',
-      amount: 0,
-      notes: '',
+      operationString: '',                  // 金额操作符
+      curOperator: '',                      // 当前操作符
+      amount: 0,                            // 金额 
+      notes: '',                            // 备注
+      accountBook: {},                      // 当前账本
+      isAccountBookOpened: false,           // 展开账本列表
+      date: dayjs().format('YYYY/MM/DD'),   // 日期
+      time: dayjs().format('HH:mm'),        // 时间
     };
   }
 
@@ -37,11 +43,14 @@ export default class MyNavbar extends Component {
   }
 
   isComplete = () => {
-    const { amount, notes } = this.state
+    const { amount, notes, accountBook, date, time } = this.state
     const { isComplete } = this.props
     isComplete && isComplete({
       amount,
       notes,
+      accountBook,
+      date,
+      time,
     })
   }
 
@@ -86,12 +95,16 @@ export default class MyNavbar extends Component {
         let value = e && e.detail && e.detail.value
         this.setState({[type]: value})
         break;
+      default:
+        this.setState({[type]: e})
+        break
     }
   }
 
   render () {
-    const { amount, operationString, notes } = this.state
+    const { amount, operationString, notes, isAccountBookOpened, accountBook } = this.state
     const { keyboardBtnCrt } = this
+
     return (
       <View className='CustomSoftKeyboard'>
         <View className='keyboard-header'>
@@ -101,6 +114,7 @@ export default class MyNavbar extends Component {
             {checkString(operationString, ['+', '-', '.']) && <Text class='keyboard-amount-operation'>{operationString}</Text>}
           </View>
         </View>
+        <SelectButtonBox onChange={this.onChange}></SelectButtonBox>
         <View className='keyboard-content'>
           {keyboardBtnCrt && keyboardBtnCrt.length && keyboardBtnCrt.map((item,index)=><View 
             key={index}

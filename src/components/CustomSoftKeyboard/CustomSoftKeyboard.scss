@@ -26,6 +26,17 @@
       }
     }
   }
+  .scroll-view_H{
+    white-space: nowrap;
+    .scroll-view-item_H {
+      display: inline-block;
+      padding: 6px 12px;
+      background-color: $color-bg-element;
+      margin: 12px;
+      border-radius: 12px;
+
+    }
+  }
   .keyboard-content {
     display: flex;
     flex-wrap: wrap;
@@ -47,6 +58,20 @@
     .isComplete .keyboard-content-button {
       background-color: $color-primary-active;
       color: $color-text-in-brand;
+    }
+  }
+}
+
+.AccountPopUpList {
+  .account-item {
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $color-line;
+    Image {
+      padding-right: 12px;
+      width:60px;
+      height: 60px;
     }
   }
 }

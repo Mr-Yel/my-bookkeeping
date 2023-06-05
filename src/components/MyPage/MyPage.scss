@@ -21,7 +21,9 @@
       position: absolute;
       left: 24px;
       top: 50%;
-      transform: translate(0, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .title-content {
       color: $color-text-in-brand;

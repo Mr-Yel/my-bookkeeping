@@ -33,15 +33,15 @@ export default class MyPage extends Component {
 
   render () {
     const { dragStyle } = this.state;
-    const { leftContent, titleContent, rightContent, children, className,
+    const { canGoBack, leftContent, titleContent, rightContent, children, className,
       UserStore: { setSysData: { statusBarHeight } } } = this.props
     return (
       <View className={`MyPage ${className || ''}`}>
         <View className='MyTitle' style={`paddingTop: ${statusBarHeight}px;`}>
-          <View className='title-left' onClick={this.routerGoBack}>
-            {leftContent}
-            {!leftContent && <MyIcon name='return'></MyIcon>}
-          </View>
+          {leftContent && <View className='title-left'>{leftContent}</View>}
+          {canGoBack && !leftContent && <View className='title-left' onClick={this.routerGoBack}>
+            <MyIcon name='return'></MyIcon>
+          </View>}
           <View className='title-content'>
             {titleContent}
           </View>

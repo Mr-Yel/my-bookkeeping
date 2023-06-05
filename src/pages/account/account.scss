@@ -1,0 +1,69 @@
+.Account {
+  position: relative;
+  .MyContent {
+    padding-top: 24px;
+  }
+  .account-title-bg {
+    position: absolute;
+    top: 0;
+    background-color: $color-primary;
+    display: flex;
+    justify-content: center;
+    height: 200px;
+    width: 100%;
+    border-radius: 0 0 100px 100px / 0 0 30px 30px;
+  }
+  .account-title {
+    position: relative;
+    margin: auto;
+    width: 80%;
+    height: 300px;
+    background-color: #fff;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 0 20px rgba($color: #000000, $alpha: 0.1);
+    .account-title-balance {
+      padding-top: 24px;
+      text-align: center;
+      font-size: 38px;
+      .balance-num {
+        padding: 12px;
+      }
+    }
+    .account-sum {
+      display: flex;
+      justify-content: space-around;
+      .account-outcome {
+        text-align: center;
+      }
+      .account-income {
+        text-align: center;
+      }
+    }
+  }
+  .account-list {
+    background-color: $color-bg-content-s;
+    margin: 24px;
+    border-radius: 24px;
+    .account-item {
+      margin: 0 24px;
+      padding: 12px 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid $color-line;
+      Image {
+        padding-right: 12px;
+        width: 60px;
+        height: 60px;
+      }
+    }
+  }
+  .account-add {
+    padding: 12px 24px;
+    .add-1{
+      padding-left: 12px;
+      color: $color-text-description;
+    }
+  }
+}

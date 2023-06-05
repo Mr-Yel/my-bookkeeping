@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { View, Text, Image } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { DEFAULT_HEADER } from '../../config'
-import { MyNavbar, MyIcon } from '../../components'
+import { MyPage, MyIcon } from '../../components'
 import { routerGoIn } from '../../utils/router'
 
 @inject('BillStore', 'UserStore')
@@ -37,10 +37,10 @@ export default class User extends Component {
 
     return (
       <View className='User'>
-        <MyNavbar
-          titleContent='我的'
-          customPlateContent={customPlateContent}
-        ></MyNavbar>
+        <MyPage titleContent='我的'>
+          <View className='bills-title-bg'></View>
+          {customPlateContent}
+        </MyPage>
       </View>
     )
   }

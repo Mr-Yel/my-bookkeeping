@@ -1,12 +1,11 @@
 import dayjs from 'dayjs'
 import Taro from "@tarojs/taro";
 import { Component } from 'react'
-import { AtButton } from 'taro-ui'
-import { View, Text, Button } from '@tarojs/components'
+import { View, Picker } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
-import { MyPage, BillsDateCard, MyIcon } from '../../components'
-import { routerGoIn } from '../../utils/router'
-import { AmountType } from '../../enum'
+import { MyPage, BillsDateCard, MyIcon } from '@/components'
+import { routerGoIn } from '@/utils/router'
+import { AmountType } from '@/enum'
 
 @inject('BillStore')
 @observer
@@ -14,14 +13,16 @@ export default class Home extends Component {
 
   constructor(props) {
     super(props)
+
+    this.curTime = dayjs()
+
     this.state = {
       billDetails: new Array(4).fill(undefined),
-      selectTime: '202205',
-      startTime: '20220501',
-      endTime: '20230531',
+      selectTime: this.curTime.format('YYYYMM'),
       activeTab: 0,
       outTotal: 0,
       inTotal: 0,
+      show: false
     }
   }
 
@@ -32,7 +33,7 @@ export default class Home extends Component {
     Taro.eventCenter.on('addBill:success', this.refreshData)
   }
 
-  componentWillUnmount () { 
+  componentWillUnmount () {
     Taro.eventCenter.off('addBill:success', this.refreshData)
   }
 
@@ -42,20 +43,20 @@ export default class Home extends Component {
 
   fetchData = async (refresh) => {
     const { BillStore } = this.props
-    const { startTime, endTime, billDetails, activeTab } = this.state
+    const { selectTime, billDetails, activeTab } = this.state
     if (billDetails[activeTab]) return
     const params = {
-      start_time: startTime,
-      end_time: endTime,
+      start_time: dayjs(selectTime).startOf('month').format('YYYYMMDD'),
+      end_time: dayjs(selectTime).endOf('month').format('YYYYMMDD'),
       bill_type: AmountType[activeTab],
     }
     const res = await BillStore.getBillDetail(params)
     if (res && res.success) {
       billDetails[activeTab] = res.data.list
-      this.setState({ 
+      this.setState({
         billDetails,
         outTotal: res.data && res.data.out_total || 0,
-        inTotal: res.data && res.data.in_total|| 0
+        inTotal: res.data && res.data.in_total || 0
       })
     }
   }
@@ -88,9 +89,7 @@ export default class Home extends Component {
   }
 
   tabsChange = (index) => {
-    this.setState({ activeTab: index },
-      () => this.fetchData(true)
-    )
+    this.setState({ activeTab: index }, () => this.fetchData())
   }
 
   getTabs = () => {
@@ -104,18 +103,29 @@ export default class Home extends Component {
     </View>
   }
 
+  onDateChange = (e) => {
+    this.setState({
+      selectTime: dayjs(e.detail.value).format('YYYYMM'),
+    }, () => this.refreshData())
+  }
+
+  toggle = () => {
+    this.setState({show: true})
+  }
+
   render () {
-    const { billDetails, startTime, endTime, activeTab, outTotal, inTotal, selectTime } = this.state
+    const { billDetails, activeTab, outTotal, inTotal, selectTime, show } = this.state
     const billList = this.billDetailFormatChange(billDetails[activeTab])
-    const header = <View
-      onClick={()=>{this.setState()}}
-    >
-      {dayjs(selectTime).format('YYYY-MM')}
-      <MyIcon name='unfold'></MyIcon>
+    const header = <View>
+      <Picker mode='date' fields='month' onChange={this.onDateChange}>
+        {dayjs(selectTime).format('YYYY-MM')}
+        <MyIcon name='unfold'></MyIcon>
+      </Picker>
     </View>
     console.log('billList', billList);
-    console.log(startTime, endTime);
-    console.log(dayjs(startTime).format('YYYY-MM-DD'), dayjs(endTime).format('YYYY-MM-DD'));
+    console.log(dayjs(selectTime).startOf('month').toDate());
+    console.log(dayjs(selectTime).endOf('month').toDate());
+
     return (
       <MyPage
         className='Home'
@@ -124,8 +134,20 @@ export default class Home extends Component {
       >
         <View className='bills-title-bg'></View>
         <View className='bills-title'>
-          <View>{outTotal}</View>
-          <View>{inTotal}</View><AtButton></AtButton>
+          <View className='bills-title-balance'>
+            <View>月结余(元)</View>
+            <View className='balance-num'>{12}</View>
+          </View>
+          <View className='bills-sum'>
+            <View className='bills-outcome'>
+              <View>支出(元)</View>
+              <View className='outcome-num'>{outTotal}</View>
+            </View>
+            <View className='bills-income'>
+              <View>收入(元)</View>
+              <View className='income-num'>{inTotal}</View>
+            </View>
+          </View>
         </View>
         {this.getTabs()}
         <View className='bills-list'>

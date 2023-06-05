@@ -3,7 +3,8 @@ export interface AccountBook {
   id: string,
   name: string,
   billListId: string,
-  userList: User[],
+  note_taker: string,
+  property: number,
 }
 
 // 账本 s
