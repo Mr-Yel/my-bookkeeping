@@ -1,8 +1,10 @@
 export const isMobile = () => {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  )
 }
 
-export function isiOS () {
+export function isiOS() {
   return /ipad|iphone|mac/i.test(navigator.userAgent)
 }
 
@@ -31,78 +33,78 @@ export const stringToBoolean = (str) => {
   return Boolean(str)
 }
 
-export function isDef (s) {
+export function isDef(s) {
   return s !== undefined
 }
 
-export function isUndef (s) {
+export function isUndef(s) {
   return s === undefined
 }
 
-export function isObject (s) {
+export function isObject(s) {
   return Object.prototype.toString.call(s) === '[object Object]'
 }
 
-export function isArray (s) {
+export function isArray(s) {
   return Object.prototype.toString.call(s) === '[object Array]'
 }
 
-export function isEmptyObject (data) {
-  const arr = Object.getOwnPropertyNames(data);
+export function isEmptyObject(data) {
+  const arr = Object.getOwnPropertyNames(data)
   return arr.length == 0
 }
 
 /**
- * base64转file    
+ * base64转file
  * base64格式：data:image/png;base64,iVBORw0KGgoAAAANSU...
  * @param {*} dataURL base64编码数据
  * @param {*} filename 文件名称
  */
-export function dataURLtoFile (dataurl, filename) {
+export function dataURLtoFile(dataurl, filename) {
   var arr = dataurl.split(','),
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,
-    u8arr = new Uint8Array(n);
+    u8arr = new Uint8Array(n)
   while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
+    u8arr[n] = bstr.charCodeAt(n)
   }
-  return new File([u8arr], filename, { type: mime });
+  return new File([u8arr], filename, { type: mime })
 }
 
 /**
-* file或blob转base64
-* @param {*} blob file或者blob
-* @param {*} callback function (data)通过参数获得base64
-*/
-export function blobToBase64 (blob, callback) {
-  const reader = new FileReader();
+ * file或blob转base64
+ * @param {*} blob file或者blob
+ * @param {*} callback function (data)通过参数获得base64
+ */
+export function blobToBase64(blob, callback) {
+  const reader = new FileReader()
   reader.addEventListener('load', () => {
-    callback(reader.result);
-  });
-  reader.readAsDataURL(blob);
+    callback(reader.result)
+  })
+  reader.readAsDataURL(blob)
 }
 
 /**
-* 随机id
-*/
-export function getId () {
+ * 随机id
+ */
+export function getId() {
   // Math.random should be unique because of its seeding algorithm.
   // Convert it to base 36 (numbers + letters), and grab the first 9 characters
   // after the decimal.
-  return '_' + Math.random().toString(36).substr(2, 9);
+  return '_' + Math.random().toString(36).substr(2, 9)
 }
 
 /**
  * 将毫秒数转为hh:mm:ss或mm:ss格式
  * 如果毫秒数超过60分钟，则以hh:mm:ss格式显示，反之以mm:ss格式显示
- * @param ms 毫秒数 
+ * @param ms 毫秒数
  * @param Separator 分隔符
  * @returns {string}
  */
-export function timeFormat (ms, Separator = ':') {
+export function timeFormat(ms, Separator = ':') {
   // 进行补0操作
-  function addZero (n) {
+  function addZero(n) {
     return n < 10 ? '0' + n : n
   }
   let h = Math.floor(ms / 1000 / 60 / 60)
@@ -136,7 +138,12 @@ export function timeFormat (ms, Separator = ':') {
  */
 let debounceTimer = {}
 // TODO 多处地方同时调用debounce时，如果第一个传的是ahead = true，另外一个传的是ahead = false, 有可能造成两个的method方法都不会被嗲用
-export const debounce = ({ method, delay = 300, ahead = false, type = 'common' }) => {
+export const debounce = ({
+  method,
+  delay = 300,
+  ahead = false,
+  type = 'common'
+}) => {
   console.log('已阻止频繁触发..........', ahead)
   if (ahead && !debounceTimer[type]) {
     method()
@@ -148,7 +155,7 @@ export const debounce = ({ method, delay = 300, ahead = false, type = 'common' }
     }
     clearTimeout(debounceTimer[type])
     debounceTimer[type] = undefined
-  }, delay);
+  }, delay)
 }
 
 /**
@@ -157,21 +164,21 @@ export const debounce = ({ method, delay = 300, ahead = false, type = 'common' }
  * @param delay 节流时间
  * @returns {string}
  */
-let throttleTimer = {};
-let canRun = true;
+let throttleTimer = {}
+let canRun = true
 export const throttle = ({ method, delay = 2000 }) => {
   if (!canRun) {
-    return;
+    return
   }
-  clearTimeout(throttleTimer);
-  canRun = false;
+  clearTimeout(throttleTimer)
+  canRun = false
   throttleTimer = setTimeout(() => {
-    method();
-    canRun = true;
-    clearTimeout(throttleTimer);
-    throttleTimer = undefined;
-  }, delay);
-};
+    method()
+    canRun = true
+    clearTimeout(throttleTimer)
+    throttleTimer = undefined
+  }, delay)
+}
 
 /**
  * 字符串转数字
@@ -180,23 +187,23 @@ export const throttle = ({ method, delay = 2000 }) => {
  */
 export const getNumber = (str) => {
   function add(a, b, precision = 2) {
-    const c = (a * 100 + b * 100) / 100;
-    const num = c.toFixed(precision).replace(/\.?0+$/, ''); // 去掉小数点后面所有的0
-    return Number(num); // 将字符串转为数字类型并返回
+    const c = (a * 100 + b * 100) / 100
+    const num = c.toFixed(precision).replace(/\.?0+$/, '') // 去掉小数点后面所有的0
+    return Number(num) // 将字符串转为数字类型并返回
   }
   function subtract(a, b, precision = 2) {
-    const c = (a * 100 - b * 100) / 100; // 把相减变成相加
-    const num = c.toFixed(precision).replace(/\.?0+$/, ''); // 去掉小数点后面所有的0
-    return Number(num); // 将字符串转为数字类型并返回
+    const c = (a * 100 - b * 100) / 100 // 把相减变成相加
+    const num = c.toFixed(precision).replace(/\.?0+$/, '') // 去掉小数点后面所有的0
+    return Number(num) // 将字符串转为数字类型并返回
   }
-  const arr = str.split(/[+|-]/); // 将字符串按照加号或减号分割成数组
-  const operators = str.match(/[+|-]/g); // 获取操作符数组
-  let result = Number(arr[0]);
-  for(let i=1; i<arr.length; i++) {
-    if(operators[i-1] === '+') {
-      result = add(result, Number(arr[i]));
+  const arr = str.split(/[+|-]/) // 将字符串按照加号或减号分割成数组
+  const operators = str.match(/[+|-]/g) // 获取操作符数组
+  let result = Number(arr[0])
+  for (let i = 1; i < arr.length; i++) {
+    if (operators[i - 1] === '+') {
+      result = add(result, Number(arr[i]))
     } else {
-      result = subtract(result, Number(arr[i]));
+      result = subtract(result, Number(arr[i]))
     }
   }
   return result
@@ -208,11 +215,35 @@ export const getNumber = (str) => {
  * @param targetArr 需要检测的字符
  * @returns {boolean}
  */
- export const checkString = (str, targetArr) => {
+export const checkString = (str, targetArr) => {
   for (let i = 0; i < targetArr.length; i++) {
     if (str.includes(targetArr[i])) {
-      return true;
+      return true
     }
   }
-  return false;
+  return false
+}
+/**
+ * 小程序上传头像至服务器
+ * @param object img
+ */
+export const uploadAvatar = (img) => {
+  return new Promise((resolve, reject) => {
+    //获取到图片的名字
+    const filename = img.picture.slice(11)
+    // 上传文件
+    wx.cloud.uploadFile({
+      // 上传到服务器上的文件路径
+      cloudPath: `avatar/${filename}`,
+      filePath: img.picture, // 小程序临时文件路径
+      success: (res) => {
+        // 返回文件 ID
+        console.log(res)
+        resolve(res.fileID)
+      },
+      fail: (error) => {
+        reject(error)
+      }
+    })
+  })
 }
