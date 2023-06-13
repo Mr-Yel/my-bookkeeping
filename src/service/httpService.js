@@ -1,12 +1,17 @@
 import Taro from "@tarojs/taro";
 import { ENV } from '../config/index'
+import UserStore from "../stores/UserStore";
 
 /**
  * 基于 wx.cloud 的 请求拦截器和响应拦截器
  * @author huang xiangkun
  * @date 2023-01-16
  */
-const baseConfig = { }
+const baseConfig = () => {
+  return {
+
+  } 
+}
 
 const initCloud = async () => {
   // eslint-disable-next-line no-undef
@@ -20,9 +25,13 @@ const deepCloneAndAssignObject = (obj1, obj2) => {
 class HttpService {
   constructor(config) {
     initCloud()
-    this.config = deepCloneAndAssignObject(baseConfig, config);
+    this.config = deepCloneAndAssignObject(baseConfig(), config);
     this.interceptor = {
       beforeRequest (configs) {
+        configs.data = {
+          ...configs.data,
+          account_id: UserStore.curAccount && UserStore.curAccount._id,
+        }
         if (configs && configs.refresh == false) {
           return configs
         }

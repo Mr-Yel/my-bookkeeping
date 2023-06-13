@@ -32,7 +32,7 @@ export default class Home extends Component {
 
   fetchData = async (refresh) => {
     const { AccountStore } = this.props
-    const res = await AccountStore.getAccountDetail()
+    const res = await AccountStore.getAccountBookList()
     if (res && res.success) {
       let billDetails = res.data
       this.setState({ billDetails })

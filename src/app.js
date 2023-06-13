@@ -16,7 +16,9 @@ const stores = {
 class App extends Component {
 
   async componentWillMount() {
-    UserStore.getUserInfo(this.init)
+    await UserStore.getUserInfo()
+    await UserStore.getAccountList()  // 获取用户账户列表
+    // await UserStore.getSysInfo()
   }
 
   componentDidMount () {}
@@ -24,11 +26,6 @@ class App extends Component {
   componentDidShow () {}
 
   componentDidHide () {}
-
-  init = () => {
-    console.log('init');
-    UserStore.getSysInfo()
-  }
 
   render () {
     // this.props.children 是将要会渲染的页面

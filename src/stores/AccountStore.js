@@ -3,8 +3,8 @@ import { observable } from "mobx";
 import { accountService } from "../service/accountService";
 
 const accountStore = observable({
-  async getAccountDetail(params) {
-    let res = await accountService.getAccountDetail(params)
+  async getAccountBookList(params) {
+    let res = await accountService.getAccountBookList(params)
     return res
   }
 });

@@ -88,8 +88,9 @@ export default class userInfoEdit extends Component {
                 className='button'
                 openType='chooseAvatar'
                 onChooseAvatar={(e) => this.setUserInfo(e, 'picture')}
-                style={`backgroundImage:url(${picture || DEFAULT_HEADER});`}
-              ></Button>
+              >
+                <Image className='user_image' src={picture || DEFAULT_HEADER}></Image>
+              </Button>
             </View>
             <View className='edit-item'>
               <Text>昵称</Text>

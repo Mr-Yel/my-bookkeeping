@@ -13,14 +13,14 @@ exports.main = async (event, context) => {
   const openid = wxContext.OPENID
   console.log(event);
   try {
-    const { start_time, end_time, bill_type } = event
+    const { start_time, end_time, bill_type, account_id } = event
     const current_date = dayjs();
     const first_date_of_month = 
       start_time ? dayjs(start_time).toDate() : current_date.startOf('month').toDate();
     const last_date_of_month = 
       end_time ? dayjs(end_time).toDate() : current_date.endOf('month').toDate();
-    const billsInCurrentMonth = await getBillsInCurrentMonth(first_date_of_month, last_date_of_month, bill_type)
-    const {out_total, in_total} = await getTotalAmount(first_date_of_month, last_date_of_month, bill_type)
+    const billsInCurrentMonth = await getBillsInCurrentMonth(first_date_of_month, last_date_of_month, bill_type, account_id)
+    const {out_total, in_total} = await getTotalAmount(first_date_of_month, last_date_of_month, bill_type, account_id)
     
 
     return {
@@ -40,13 +40,14 @@ exports.main = async (event, context) => {
   }
 }
 
-const getBillsInCurrentMonth = async (first_date_of_month, last_date_of_month, bill_type) => {
+const getBillsInCurrentMonth = async (first_date_of_month, last_date_of_month, bill_type, account_id = 0) => {
   const res = await billsCollection.aggregate()
     .match({
       date_time: {
         $gte: first_date_of_month,
         $lte: last_date_of_month
-      }
+      },
+      account_id: account_id,
     })
     .lookup({
       from: 'bill_types',
@@ -73,13 +74,14 @@ const getBillsInCurrentMonth = async (first_date_of_month, last_date_of_month, 
   return res
 }
 
-const getTotalAmount =  async (first_date_of_month, last_date_of_month, bill_type) => {
+const getTotalAmount =  async (first_date_of_month, last_date_of_month, bill_type, account_id = 0) => {
   const res = await billsCollection.aggregate()
     .match({
         date_time: {
             $gte: first_date_of_month,
             $lte: last_date_of_month
-        }
+        },
+        account_id: account_id,
     })
     .lookup({
         from: 'bill_types',

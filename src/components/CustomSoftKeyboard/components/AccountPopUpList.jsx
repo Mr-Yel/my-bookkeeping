@@ -30,7 +30,7 @@ export default class AccountPopUpList extends Component {
 
   fetchData = async () => {
     const { AccountStore, onChange } = this.props
-    const res = await AccountStore.getAccountDetail()
+    const res = await AccountStore.getAccountBookList()
     console.log(res);
     if(res && res.data) {
       this.setState({accountBooks: res.data})

@@ -3,6 +3,7 @@ import { observable } from 'mobx'
 import { service } from '../service'
 import { storage } from '../utils/storage'
 import { uploadAvatar } from '../utils/index'
+import { accountService } from '../service/accountService'
 
 const UserStore = observable({
   userInfo: {
@@ -13,6 +14,8 @@ const UserStore = observable({
   setSysData: {
     statusBarHeight: 0
   },
+  accountList: [],
+  curAccount: {},
   async getUserInfo(callback) {
     storage
       .get('userInfo')
@@ -49,6 +52,19 @@ const UserStore = observable({
       ...info
     }
     this.setSysData = setSysData
+  },
+  async getAccountList() {
+    try {
+      let res = await accountService.getAccountList()
+      if (res && res.success) {
+        console.log(res);
+        this.accountList = res.data
+        this.curAccount = res.data.find(e=>e.is_cur_account)
+        return res.data
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 })
 export default UserStore
