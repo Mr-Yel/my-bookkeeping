@@ -14,12 +14,12 @@ exports.main = async (event, context) => {
   try {
     const collection = db.collection('bills')
     const newBill = {
-      amount: event.amount,
-      bill_type_id: event.bill_type_id,
-      date_time: dayjs(event.date_time).toDate(),
-      from_book: event.from_book,
-      note_taker: event.note_taker,
-      notes: event.notes,
+      amount: event.amount || 0,
+      bill_type_id: event.bill_type_id || '',
+      date_time: dayjs(event.date_time).toDate() || dayjs().toDate(),
+      account_book_id: event.account_book_id || '',
+      account_id: event.account_id || '',
+      notes: event.notes || '',
     }
     const res = await collection.add({
       data: {

@@ -96,14 +96,14 @@ export default class addBill extends Component {
   }
 
   isComplete = async (data) => {
-    const { BillStore, UserStore: { userInfo } } = this.props
+    const { BillStore, UserStore: { curAccount } } = this.props
     const params = {
       notes: data && data.notes || '',
       amount: data && data.amount || 0,
       bill_type_id: this.curBillType._id,
       date_time: dayjs(data.date + data.time).format("YYYYMMDDHHmmss"),
-      from_book: data.accountBook && data.accountBook._id, // TODO 账本
-      note_taker: userInfo && userInfo._id,
+      account_book_id: data.accountBook && data.accountBook._id, // TODO 账本
+      account_id: curAccount._id,
     }
     const res = await BillStore.editBill(params)
     if(res && res.success) {
