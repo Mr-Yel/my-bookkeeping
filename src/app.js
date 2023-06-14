@@ -16,9 +16,9 @@ const stores = {
 class App extends Component {
 
   async componentWillMount() {
-    await UserStore.getUserInfo()
-    await UserStore.getAccountList()  // 获取用户账户列表
-    // await UserStore.getSysInfo()
+    // await UserStore.getUserInfo()
+    // await UserStore.getAccountList()  // 获取用户账户列表
+    await UserStore.getSysInfo()
   }
 
   componentDidMount () {}

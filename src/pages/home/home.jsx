@@ -7,7 +7,7 @@ import { MyPage, BillsDateCard, MyIcon } from '@/components'
 import { routerGoIn } from '@/utils/router'
 import { AmountType } from '@/enum'
 
-@inject('BillStore')
+@inject('BillStore','UserStore')
 @observer
 export default class Home extends Component {
 
@@ -28,13 +28,16 @@ export default class Home extends Component {
 
   componentWillMount () { }
 
-  componentDidMount () {
+  async componentDidMount () {
+    const { UserStore } = this.props
+    await UserStore.getUserInfo()
+    await UserStore.getAccountList()  // 获取用户账户列表
     this.fetchData()
-    Taro.eventCenter.on('addBill:success', this.refreshData)
+    Taro.eventCenter.on('homeList:refresh', this.refreshData)
   }
 
   componentWillUnmount () {
-    Taro.eventCenter.off('addBill:success', this.refreshData)
+    Taro.eventCenter.off('homeList:refresh', this.refreshData)
   }
 
   componentDidShow () { }

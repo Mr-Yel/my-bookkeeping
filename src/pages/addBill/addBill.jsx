@@ -108,7 +108,7 @@ export default class addBill extends Component {
     const res = await BillStore.editBill(params)
     if(res && res.success) {
       console.log(res);
-      Taro.eventCenter.trigger('addBill:success');
+      Taro.eventCenter.trigger('homeList:refresh');
       routerGoBack()
     }
   }

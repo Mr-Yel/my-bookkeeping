@@ -57,10 +57,8 @@ const UserStore = observable({
     try {
       let res = await accountService.getAccountList()
       if (res && res.success) {
-        console.log(res);
         this.accountList = res.data
         this.curAccount = res.data.find(e=>e.is_cur_account)
-        return res.data
       }
     } catch (err) {
       console.log(err)

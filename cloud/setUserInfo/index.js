@@ -19,7 +19,11 @@ exports.main = async (event, context) => {
     if(res && res.data && res.data.length) {
       // openid 为每个用户的唯一标识，一定是唯一的
       // 存在用户数据
-      const userData = Object.assign(res.data[0], event)
+      const userData = Object.assign(res.data[0], {
+        name: event.name,
+        openid: event.openid,
+        picture: event.picture,
+      })
       const _id = res.data[0]._id
       delete userData._id
       const updateRes = await collection.doc(_id).update({
