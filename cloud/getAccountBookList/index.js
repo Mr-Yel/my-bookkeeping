@@ -14,7 +14,11 @@ exports.main = async (event, context) => {
   console.log(event);
   try {
     if(!event.showDetail) {
-      const res = await accountCollection.get();
+      const res = await accountCollection
+        .where({
+          account_id: event.account_id
+        })
+        .get();
       return {
         success: true,
         data: res && res.data,

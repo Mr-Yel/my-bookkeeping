@@ -13,102 +13,51 @@ exports.main = async (event, context) => {
   const openid = wxContext.OPENID
   console.log(event);
   try {
-    const { start_time, end_time, bill_type, account_id } = event
-    const current_date = dayjs();
-    const first_date_of_month = 
-      start_time ? dayjs(start_time).toDate() : current_date.startOf('month').toDate();
-    const last_date_of_month = 
-      end_time ? dayjs(end_time).toDate() : current_date.endOf('month').toDate();
-    const billsInCurrentMonth = await getBillsInCurrentMonth(first_date_of_month, last_date_of_month, bill_type, account_id)
-    const {out_total, in_total} = await getTotalAmount(first_date_of_month, last_date_of_month, bill_type, account_id)
-    
+    const { _id } = event
+    const res = billsCollection.aggregate()
+      .match({
+        _id: _id,
+      })
+      .lookup({
+        from: 'bill_types',
+        localField: 'bill_type_id',
+        foreignField: '_id',
+        as: 'bill_type_info'
+      })
+      .addFields({
+        'bill_type': {
+          '_id': {
+            $arrayElemAt: ['$bill_type_info._id', 0]
+          },
+          'bill_type_name': {
+            $arrayElemAt: ['$bill_type_info.bill_type_name', 0]
+          },
+          'bill_type_icon': {
+            $arrayElemAt: ['$bill_type_info.bill_type_icon', 0]
+          },
+          'bill_type': {
+            $arrayElemAt: ['$bill_type_info.bill_type', 0]
+          },
+          'bill_type_color': {
+            $arrayElemAt: ['$bill_type_info.bill_type_color', 0]
+          },
+        }
+      })
+      .project({
+        bill_type_info: 0,
+        bill_type_id: 0
+      })
+      .end();
 
     return {
+      data: res[0],
       success: true,
-      data: {
-        list: billsInCurrentMonth && billsInCurrentMonth.list,
-        out_total,
-        in_total
-      } 
-    };
+    }
   } catch (err) {
     console.log(err)
     return {
       errMsg: err,
       success: false,
     }
-  }
-}
-
-const getBillsInCurrentMonth = async (first_date_of_month, last_date_of_month, bill_type, account_id = 0) => {
-  const res = await billsCollection.aggregate()
-    .match({
-      date_time: {
-        $gte: first_date_of_month,
-        $lte: last_date_of_month
-      },
-      account_id: account_id,
-    })
-    .lookup({
-      from: 'bill_types',
-      localField: 'bill_type_id',
-      foreignField: '_id',
-      as: 'bill_type_info'
-    }) .addFields({
-      'bill_type_name': {
-        $arrayElemAt: ['$bill_type_info.bill_type_name', 0]
-      },
-      'bill_type_icon': {
-        $arrayElemAt: ['$bill_type_info.bill_type_icon', 0]
-      },
-      'bill_type': {
-        $arrayElemAt: ['$bill_type_info.bill_type', 0]
-      },
-      'bill_type_color': {
-        $arrayElemAt: ['$bill_type_info.bill_type_color', 0]
-      },
-    })
-    .match((bill_type === "all" || !bill_type) ? {} : { bill_type: bill_type })
-    .sort({date_time: -1})
-    .end();
-  return res
-}
-
-const getTotalAmount =  async (first_date_of_month, last_date_of_month, bill_type, account_id = 0) => {
-  const res = await billsCollection.aggregate()
-    .match({
-        date_time: {
-            $gte: first_date_of_month,
-            $lte: last_date_of_month
-        },
-        account_id: account_id,
-    })
-    .lookup({
-        from: 'bill_types',
-        localField: 'bill_type_id',
-        foreignField: '_id',
-        as: 'bill_type_info'
-    })
-    .addFields({
-        'bill_type': {
-            $arrayElemAt: ['$bill_type_info.bill_type', 0]
-        },
-    })
-    .end();
-  const out_total = res.list.reduce((x,y)=>{
-    if(y.bill_type == 'out') {
-      x += y.amount
-    }
-    return x
-  }, 0);
-  const in_total = res.list.reduce((x,y)=>{
-    if(y.bill_type == 'in') {
-      x += y.amount
-    }
-    return x
-  }, 0);
-  return {
-    out_total,
-    in_total
   }
 }
