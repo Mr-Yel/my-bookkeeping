@@ -1,9 +1,9 @@
 import httpService from './httpService'
 
 export const billService = {
-  getBillDetail: async (data) => {
+  getBillsList: async (data) => {
     return await httpService.request({
-      name: 'getBillDetail',
+      name: 'getBillsList',
       data
     }, true)
   },

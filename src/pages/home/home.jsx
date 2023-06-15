@@ -53,7 +53,7 @@ export default class Home extends Component {
       end_time: dayjs(selectTime).endOf('month').format('YYYYMMDD'),
       bill_type: AmountType[activeTab],
     }
-    const res = await BillStore.getBillDetail(params)
+    const res = await BillStore.getBillsList(params)
     if (res && res.success) {
       billDetails[activeTab] = res.data.list
       this.setState({
@@ -115,6 +115,17 @@ export default class Home extends Component {
   toggle = () => {
     this.setState({show: true})
   }
+  aaa = () => {
+    Taro.showActionSheet({
+      itemList: ['A', 'B', 'C'],
+      success: function (res) {
+        console.log(res.tapIndex)
+      },
+      fail: function (res) {
+        console.log(res.errMsg)
+      }
+    })
+  }
 
   render () {
     const { billDetails, activeTab, outTotal, inTotal, selectTime, show } = this.state
@@ -156,6 +167,7 @@ export default class Home extends Component {
         <View className='bills-list'>
           {billList && !!billList.length && billList.map((item, index) => <View
             key={index}
+            onClick={this.aaa}
           >
             <BillsDateCard billCardList={item.list} date={item.date}></BillsDateCard>
           </View>)}

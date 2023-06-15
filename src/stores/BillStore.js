@@ -8,8 +8,8 @@ const billStore = observable({
   accountBookId: '11',
   billList: [],
 
-  async getBillDetail(params) {
-    let res = await billService.getBillDetail(params)
+  async getBillsList(params) {
+    let res = await billService.getBillsList(params)
     return res
   },
 
