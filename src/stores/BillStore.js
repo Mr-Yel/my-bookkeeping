@@ -1,6 +1,6 @@
-import Taro from "@tarojs/taro";
-import { observable } from "mobx";
-import { billService } from "../service/billService";
+import Taro from '@tarojs/taro'
+import { observable } from 'mobx'
+import { billService } from '../service/billService'
 
 const billStore = observable({
   accountBooks: [],
@@ -18,9 +18,14 @@ const billStore = observable({
     return res
   },
 
+  async getBillDetail(params) {
+    let res = await billService.getBillDetail(params)
+    return res
+  },
+
   async editBill(params) {
     let res = await billService.editBill(params)
     return res
   }
-});
-export default billStore;
+})
+export default billStore
