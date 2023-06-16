@@ -14,13 +14,13 @@ export default class CustomSoftKeyboard extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      operationString: '', // 金额操作符
-      curOperator: '', // 当前操作符
-      amount: 0, // 金额
-      notes: '', // 备注
-      accountBook: {}, // 当前账本
-      date: dayjs().format('YYYY/MM/DD'), // 日期
-      time: dayjs().format('HH:mm') // 时间
+      operationString: '',                  // 金额操作符
+      curOperator: '',                      // 当前操作符
+      amount: 0,                            // 金额
+      notes: '',                            // 备注
+      accountBook: {},                      // 当前账本
+      date: dayjs().format('YYYY/MM/DD'),   // 日期
+      time: dayjs().format('HH:mm'),        // 时间
     }
   }
 
@@ -100,8 +100,10 @@ export default class CustomSoftKeyboard extends Component {
   }
 
   updateValue = (data) => {
-    this.setState({ notes: data.notes })
-    this.setState({ amount: data.amount })
+    this.setState({ 
+      notes: data.notes, 
+      amount: data.amount  
+    })
   }
 
   render() {
