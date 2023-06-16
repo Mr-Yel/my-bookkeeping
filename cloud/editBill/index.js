@@ -13,37 +13,35 @@ exports.main = async (event, context) => {
   console.log(event);
   try {
     const collection = db.collection('bills')
-    const newBill = {
-      amount: event.amount || 0,
-      bill_type_id: event.bill_type_id || '',
-      date_time: dayjs(event.date_time).toDate() || dayjs().toDate(),
-      account_book_id: event.account_book_id || '',
-      account_id: event.account_id || '',
-      notes: event.notes || '',
+    const billData = {}
+    if(event._id) {
+      let billListRes = collection.doc(event._id).get()
+      if(billListRes && billListRes.list && billListRes.list[0]) {
+        billData = billListRes.list[0]
+      }
     }
-    const res = await collection.add({
-      data: {
-        ...newBill
-      }
-    })
-    collection.orderBy('index', 'desc').limit(1).get({
-      success: res => {
-        const maxIndex = res.data.length ? res.data[0].index : -1
-        // 将新文档的序号设置为最大值加一
-        newDoc.index = maxIndex + 1
-        // 插入新文档
-        collection.add({
-          data: newDoc,
-          success: res => {
-            console.log('新文档插入成功')
-          },
-          fail: err => {
-            console.error('新文档插入失败', err)
-          }
-        })
-      }
-    })
-    const { _id } = res
+    const newBill = {
+      amount: event.amount || billData.amount || 0,
+      bill_type_id: event.bill_type_id || billData.bill_type_id || '',
+      date_time: dayjs(event.date_time).toDate() || billData.date_time || dayjs().toDate(),
+      account_book_id: event.account_book_id || billData.account_book_id || '',
+      account_id: event.account_id || billData.account_id || '',
+      notes: event.notes || billData.notes || '',
+    }
+    const res = event._id ? 
+      // 修改
+      await collection.doc(event._id).update({
+        data: {
+          ...newBill
+        }
+      }) : 
+      // 新增
+      await collection.add({
+        data: {
+          ...newBill
+        }
+      })
+    const _id = event._id || res._id
     return {
       success: true,
       data: _id
