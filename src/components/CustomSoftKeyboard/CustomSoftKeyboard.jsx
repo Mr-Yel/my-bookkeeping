@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { Component } from 'react'
-import { View, Input, Text, ScrollView } from '@tarojs/components'
+import { View, Input, Text } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { MyIcon } from '@/components'
 import { getNumber, checkString } from '@/utils'
@@ -19,7 +19,6 @@ export default class CustomSoftKeyboard extends Component {
       amount: 0, // 金额
       notes: '', // 备注
       accountBook: {}, // 当前账本
-      isAccountBookOpened: false, // 展开账本列表
       date: dayjs().format('YYYY/MM/DD'), // 日期
       time: dayjs().format('HH:mm') // 时间
     }
@@ -106,36 +105,37 @@ export default class CustomSoftKeyboard extends Component {
   }
 
   render() {
-    const { amount, operationString, notes, isAccountBookOpened, accountBook } = this.state
+    const { amount, operationString, notes } = this.state
     const { keyboardBtnCrt } = this
 
     return (
-      <View className="CustomSoftKeyboard">
-        <View className="keyboard-header">
+      <View className='CustomSoftKeyboard'>
+        <View className='keyboard-header'>
           <Input
-            type="text"
+            type='text'
             value={notes}
             onInput={(e) => this.onChange('notes', e)}
-            class="keyboard-note"
-            placeholder="备注"
+            class='keyboard-note'
+            placeholder='备注'
           />
-          <View class="keyboard-amount">
-            <Text class="keyboard-amount-res">￥{amount}</Text>
+          <View class='keyboard-amount'>
+            <Text class='keyboard-amount-res'>￥{amount}</Text>
             {checkString(operationString, ['+', '-', '.']) && (
-              <Text class="keyboard-amount-operation">{operationString}</Text>
+              <Text class='keyboard-amount-operation'>{operationString}</Text>
             )}
           </View>
         </View>
         <SelectButtonBox onChange={this.onChange}></SelectButtonBox>
-        <View className="keyboard-content">
+        <View className='keyboard-content'>
           {keyboardBtnCrt &&
             keyboardBtnCrt.length &&
             keyboardBtnCrt.map((item, index) => (
               <View
                 key={index}
-                className="keyboard-content-item"
-                style={`width: ${item.width ? item.width * 25 : 25}%;`}>
-                <View className="keyboard-content-button" onClick={() => this.keyboardClick(item)}>
+                className='keyboard-content-item'
+                style={`width: ${item.width ? item.width * 25 : 25}%;`}
+              >
+                <View className='keyboard-content-button' onClick={() => this.keyboardClick(item)}>
                   {item.type == 'retreat' && <MyIcon name={item.icon}></MyIcon>}
                   {item.type != 'retreat' && <Text>{item.value}</Text>}
                 </View>

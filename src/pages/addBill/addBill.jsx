@@ -1,10 +1,10 @@
+import dayjs from 'dayjs'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Text, Input } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { MyPage, MyIcon, CustomSoftKeyboard } from '../../components'
 import { routerGoBack } from '../../utils/router'
-import dayjs from 'dayjs'
 
 const enumBillType = {
   out: 0,
@@ -82,7 +82,7 @@ export default class addBill extends Component {
       if (bill && bill.success) {
         const { data } = bill
         this.curBillType = data.bill_type
-        this.refs.CustomSoftKeyboard.updateValue({ notes: data.notes, amount: data.amount })
+        this.CustomSoftKeyboard.updateValue({ notes: data.notes, amount: data.amount })
       }
     }
   }
@@ -128,39 +128,40 @@ export default class addBill extends Component {
   render() {
     const { billTypes, curBillTab } = this.state
     const tabs = (
-      <View className="tabs">
-        <View className="tabs-item" onClick={() => this.changeBillType('out')}>
+      <View className='tabs'>
+        <View className='tabs-item' onClick={() => this.changeBillType('out')}>
           支出
         </View>
-        <View className="tabs-item" onClick={() => this.changeBillType('in')}>
+        <View className='tabs-item' onClick={() => this.changeBillType('in')}>
           收入
         </View>
-        <View className="tabs-item" onClick={() => this.changeBillType('in')}>
+        <View className='tabs-item' onClick={() => this.changeBillType('in')}>
           转账
         </View>
       </View>
     )
     return (
-      <View className="addBill">
-        <MyPage canGoBack titleContent="我的">
+      <View className='addBill'>
+        <MyPage canGoBack titleContent='我的'>
           {tabs}
-          <View className="content">
+          <View className='content'>
             {billTypes &&
               billTypes[curBillTab] &&
               billTypes[curBillTab].map((item) => (
-                <View key={item._id} className="amount-type-item" onClick={() => this.billTypeOnClick(item)}>
+                <View key={item._id} className='amount-type-item' onClick={() => this.billTypeOnClick(item)}>
                   <View
                     className={`amount-type-icon ${item._id == this.curBillType._id ? 'active' : ''}`}
-                    style={`backgroundColor: ${item._id == this.curBillType._id ? item.bill_type_color : '#FFF'}`}>
+                    style={`backgroundColor: ${item._id == this.curBillType._id ? item.bill_type_color : '#FFF'}`}
+                  >
                     <MyIcon name={item.bill_type_icon}></MyIcon>
                   </View>
-                  <Text className="amount-type-name">{item.bill_type_name}</Text>
+                  <Text className='amount-type-name'>{item.bill_type_name}</Text>
                 </View>
               ))}
           </View>
 
-          <View className="footer">
-            <CustomSoftKeyboard isComplete={(e) => this.isComplete(e)} ref={'CustomSoftKeyboard'}></CustomSoftKeyboard>
+          <View className='footer'>
+            <CustomSoftKeyboard isComplete={(e) => this.isComplete(e)} ref={this.CustomSoftKeyboard}></CustomSoftKeyboard>
           </View>
         </MyPage>
       </View>

@@ -4,8 +4,8 @@ import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
-import { MyIcon } from '../index'
 import { routerGoIn } from '@/utils/router'
+import { MyIcon } from '../index'
 
 @inject('BillStore', 'UserStore')
 @observer
@@ -70,10 +70,10 @@ export default class BillsDateCard extends Component {
     const formattedDate = this.getDate(date)
     const { totalIncome, totalExpenditure } = this.getTotalRecord(billCardList)
     return (
-      <View className="BillsDateCard">
-        <View className="bill-card-title">
-          <View className="time">{formattedDate}</View>
-          <View className="sumUp">
+      <View className='BillsDateCard'>
+        <View className='bill-card-title'>
+          <View className='time'>{formattedDate}</View>
+          <View className='sumUp'>
             {!!totalIncome && `收入: ${totalIncome}`} &nbsp;
             {!!totalExpenditure && `支出: ${totalExpenditure}`}
           </View>
@@ -81,15 +81,15 @@ export default class BillsDateCard extends Component {
         {billCardList &&
           !!billCardList.length &&
           billCardList.map((item, index) => (
-            <View key={index} className="bill-card-item" onClick={() => this.openActionSheet(item._id)}>
-              <View className="bill-card-icon" style={`backgroundColor: ${item.bill_type_color}`}>
+            <View key={index} className='bill-card-item' onClick={() => this.openActionSheet(item._id)}>
+              <View className='bill-card-icon' style={`backgroundColor: ${item.bill_type_color}`}>
                 <MyIcon name={item.bill_type_icon}></MyIcon>
               </View>
-              <View className="bill-card-name">
-                <View className="bill-card-type-name">{item.bill_type_name}</View>
-                <View className="bill-card-notes">{item.notes}</View>
+              <View className='bill-card-name'>
+                <View className='bill-card-type-name'>{item.bill_type_name}</View>
+                <View className='bill-card-notes'>{item.notes}</View>
               </View>
-              <View className="bill-card-money">
+              <View className='bill-card-money'>
                 <Text>{item.amount}</Text>
               </View>
             </View>

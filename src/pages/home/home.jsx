@@ -21,13 +21,12 @@ export default class Home extends Component {
       activeTab: 0,
       outTotal: 0,
       inTotal: 0,
-      show: false
     }
   }
 
-  componentWillMount() {}
+  componentWillMount () { }
 
-  async componentDidMount() {
+  async componentDidMount () {
     const { UserStore } = this.props
     await UserStore.getUserInfo()
     await UserStore.getAccountList() // 获取用户账户列表
@@ -35,15 +34,15 @@ export default class Home extends Component {
     Taro.eventCenter.on('homeList:refresh', this.refreshData)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     Taro.eventCenter.off('homeList:refresh', this.refreshData)
   }
 
-  componentDidShow() {}
+  componentDidShow () { }
 
-  componentDidHide() {}
+  componentDidHide () { }
 
-  fetchData = async (refresh) => {
+  fetchData = async () => {
     const { BillStore } = this.props
     const { selectTime, billDetails, activeTab } = this.state
     if (billDetails[activeTab]) return
@@ -64,14 +63,14 @@ export default class Home extends Component {
   }
 
   refreshData = () => {
-    this.setState({ activeTab: 0, billDetails: [] }, () => this.fetchData(true))
+    this.setState({ activeTab: 0, billDetails: [] }, () => this.fetchData())
   }
 
   goToAddBill = () => {
     routerGoIn(`/pages/addBill/addBill`)
   }
 
-  billDetailFormatChange(billDetail) {
+  billDetailFormatChange (billDetail) {
     if (billDetail && billDetail.length) {
       billDetail = billDetail.map((e) => ({ ...e, date: dayjs(e.date_time).format('YYYYMMDD') }))
       let a = billDetail.reduce((acc, curr) => {
@@ -96,12 +95,13 @@ export default class Home extends Component {
   getTabs = () => {
     const { activeTab } = this.state
     return (
-      <View className="tabs">
+      <View className='tabs'>
         {['全部', '支出', '收入', '转账'].map((item, index) => (
           <View
             className={`tabs-item ${activeTab == index ? 'active' : ''}`}
             key={index}
-            onClick={() => this.tabsChange(index)}>
+            onClick={() => this.tabsChange(index)}
+          >
             {item}
           </View>
         ))}
@@ -118,18 +118,14 @@ export default class Home extends Component {
     )
   }
 
-  toggle = () => {
-    this.setState({ show: true })
-  }
-
-  render() {
-    const { billDetails, activeTab, outTotal, inTotal, selectTime, show } = this.state
+  render () {
+    const { billDetails, activeTab, outTotal, inTotal, selectTime } = this.state
     const billList = this.billDetailFormatChange(billDetails[activeTab])
     const header = (
       <View>
-        <Picker mode="date" fields="month" onChange={this.onDateChange}>
+        <Picker mode='date' fields='month' onChange={this.onDateChange}>
           {dayjs(selectTime).format('YYYY-MM')}
-          <MyIcon name="unfold"></MyIcon>
+          <MyIcon name='unfold'></MyIcon>
         </Picker>
       </View>
     )
@@ -138,26 +134,26 @@ export default class Home extends Component {
     console.log(dayjs(selectTime).endOf('month').toDate())
 
     return (
-      <MyPage className="Home" titleContent={header} showBg>
-        <View className="bills-title-bg"></View>
-        <View className="bills-title">
-          <View className="bills-title-balance">
+      <MyPage className='Home' titleContent={header} showBg>
+        <View className='bills-title-bg'></View>
+        <View className='bills-title'>
+          <View className='bills-title-balance'>
             <View>月结余(元)</View>
-            <View className="balance-num">{12}</View>
+            <View className='balance-num'>{12}</View>
           </View>
-          <View className="bills-sum">
-            <View className="bills-outcome">
+          <View className='bills-sum'>
+            <View className='bills-outcome'>
               <View>支出(元)</View>
-              <View className="outcome-num">{outTotal}</View>
+              <View className='outcome-num'>{outTotal}</View>
             </View>
-            <View className="bills-income">
+            <View className='bills-income'>
               <View>收入(元)</View>
-              <View className="income-num">{inTotal}</View>
+              <View className='income-num'>{inTotal}</View>
             </View>
           </View>
         </View>
         {this.getTabs()}
-        <View className="bills-list">
+        <View className='bills-list'>
           {billList &&
             !!billList.length &&
             billList.map((item, index) => (
@@ -166,7 +162,7 @@ export default class Home extends Component {
               </View>
             ))}
         </View>
-        <View className="take-bill" onClick={this.goToAddBill}>
+        <View className='take-bill' onClick={this.goToAddBill}>
           记一笔
         </View>
       </MyPage>
