@@ -14,7 +14,13 @@ exports.main = async (event, context) => {
   console.log(event);
   try {
     const { _id } = event
-    const res = billsCollection.aggregate()
+    if(!_id || typeof _id != 'string') {
+      return {
+        msg: '_id 不存在或者格式有误',
+        success: false,
+      }
+    }
+    const res = await billsCollection.aggregate()
       .match({
         _id: _id,
       })
@@ -50,7 +56,7 @@ exports.main = async (event, context) => {
       .end();
 
     return {
-      data: res[0],
+      data: res && res.list && res.list[0] || {},
       success: true,
     }
   } catch (err) {
