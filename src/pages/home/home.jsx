@@ -29,7 +29,7 @@ export default class Home extends Component {
   async componentDidMount () {
     const { UserStore } = this.props
     await UserStore.getUserInfo()
-    await UserStore.getAccountList() // 获取用户账户列表
+    await UserStore.getAccountBookList() // 获取用户账户列表
     this.fetchData()
     Taro.eventCenter.on('homeList:refresh', this.refreshData)
   }

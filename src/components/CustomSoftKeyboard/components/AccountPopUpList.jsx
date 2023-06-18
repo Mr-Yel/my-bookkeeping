@@ -2,8 +2,8 @@ import { Component } from 'react'
 import { View, Input, Text, ScrollView, Image } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { MyIcon, MyPopUp } from '@/components'
-import { getNumber, checkString } from '@/utils'
-import { routerGoBack } from '@/utils/router'
+// import { getNumber, checkString } from '@/utils'
+// import { routerGoBack } from '@/utils/router'
 
 @inject('AccountStore', 'UserStore')
 @observer
@@ -30,7 +30,7 @@ export default class AccountPopUpList extends Component {
 
   fetchData = async () => {
     const { AccountStore, onChange } = this.props
-    const res = await AccountStore.getAccountBookList()
+    const res = await AccountStore.getAccountList()
     console.log(res);
     if(res && res.data) {
       this.setState({accountBooks: res.data})

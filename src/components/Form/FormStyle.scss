@@ -1,0 +1,131 @@
+.FormLabel {
+  font-size: 32px;
+  line-height: 44px;
+  color: $color-text-primary;
+  padding-left: 16px;
+  position: relative;
+  font-weight: bold;
+  flex: 1 1 auto;
+
+  .required {
+    position: absolute;
+    color: #ED4622;
+    left: 0;
+    top: 0;
+  }
+}
+
+.FormContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+  margin: 0 32px;
+  position: relative;
+
+  .FormValue {
+    flex: 0 0 400px;
+    text-align: right;
+    font-size: 28px;
+    line-height: 48px;
+    height: 48px;
+    color: $color-text-primary-s;
+    outline: none;
+    @include text-truncate;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: $color-line;
+    transform: scaleY(0.5);
+  }
+}
+
+
+.FormPickerEnter {
+  font-size: 24px;
+  color: $color-text-primary-s;
+  margin-left: 8px;
+}
+
+.picker-value {
+  flex: 0 0 400px;
+  text-align: right;
+  font-size: 28px;
+  line-height: 48px;
+  height: 48px;
+  color: $color-text-primary-s;
+  @include text-truncate;
+  .exe {
+    margin-left: 8px;
+  }
+}
+
+.FormTextarea {
+  padding: 0 32px;
+  margin-bottom: 120px;
+  .form-textarea-title {
+    height: 60px;
+    line-height: 60px;
+  }
+  .form-label {
+    padding-left: 0;
+    line-height: 60px;
+  }
+  .form-textarea-content {
+    border: 2px solid $color-line;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 16px 24px;
+    margin-top: 16px;
+  }
+  .textarea-value {
+    width: 100%;
+    height: 280px;
+    box-sizing: border-box;
+    border: 0;
+    resize: none;
+    line-height: 40px;
+    font-size: 28px;
+    color: $color-text-description;
+    -webkit-appearance: none;
+  }
+  .desc-rich-text {
+    margin-top: 16px;
+    width: 100%;
+    height: 280px;
+    padding: 16px 24px;
+    box-sizing: border-box;
+    border: 2px solid $color-line;
+    border-radius: 8px;
+    resize: none;
+    line-height: 40px;
+    font-size: 28px;
+    color: $color-text-description;
+    -webkit-appearance: none;
+    overflow-y: scroll;
+    img {
+      display: block;
+      width: auto !important;
+      height: auto !important;
+      max-width: 100%;
+    }
+  }
+}
+
+.FormEQuickInput {
+  padding: 0 32px;
+  .FormLabel {
+    display: block;
+    padding-bottom: 14px;
+    padding-top: 14px;
+  }
+  .ERecordInput-bottom {
+    left: 0;
+  }
+}

@@ -2,15 +2,22 @@ import httpService from './httpService'
 
 export const accountService = {
   // 获取账户列表
-  getAccountList: async () => {
+  getAccountBookList: async () => {
     return await httpService.request({
-      name: 'getAccountList',
+      name: 'getAccountBookList',
     }, true)
   },
   // 获取账本列表
-  getAccountBookList: async (data) => {
+  getAccountList: async (data) => {
     return await httpService.request({
-      name: 'getAccountBookList',
+      name: 'getAccountList',
+      data
+    }, false)
+  },
+  // 修改新增账本
+  editAccount: async (data) => {
+    return await httpService.request({
+      name: 'editAccount',
       data
     }, true)
   },

@@ -105,7 +105,7 @@ export default class addBill extends Component {
   isComplete = async (data) => {
     const {
       BillStore,
-      UserStore: { curAccount }
+      UserStore: { curAccountBook }
     } = this.props
     const { router } = getCurrentInstance()
     const params = {
@@ -113,8 +113,8 @@ export default class addBill extends Component {
       amount: (data && data.amount) || 0,
       bill_type_id: this.curBillType._id,
       date_time: dayjs(data.date + data.time).format('YYYYMMDDHHmmss'),
-      account_book_id: data.accountBook && data.accountBook._id, // TODO 账本
-      account_id: curAccount._id
+      account_book_id: data.accountBook && data.accountBook._id,
+      account_id: curAccountBook._id
     }
     if (router.params.id) params._id = router.params.id
     const res = await BillStore.editBill(params)

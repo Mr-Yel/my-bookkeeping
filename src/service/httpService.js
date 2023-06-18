@@ -30,7 +30,7 @@ class HttpService {
       beforeRequest (configs) {
         configs.data = {
           ...configs.data,
-          account_id: UserStore.curAccount && UserStore.curAccount._id,
+          account_book_id: UserStore.curAccountBook && UserStore.curAccountBook._id,
         }
         if (configs && configs.refresh == false) {
           return configs
@@ -45,6 +45,10 @@ class HttpService {
         return res
       },
       beforeResponseError (e) {
+        Taro.showToast({
+          title: '请求出错',
+          icon: 'none'
+        })
         Taro.hideLoading()
         return e
       },
@@ -69,8 +73,9 @@ class HttpService {
       wx.cloud.callFunction({
         ...config,
       }).then(res => {
+        console.log('params',params);
         console.log('respond:res',res);
-        if ('cloud.callFunction:ok'.includes(res.errMsg)) {
+        if ('cloud.callFunction:ok'.includes(res.errMsg) && res?.result?.success) {
           // 请求成功后
           const response = this.interceptor.beforeResponse(res.result);
           resolve(response)

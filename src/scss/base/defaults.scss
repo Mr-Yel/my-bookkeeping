@@ -113,3 +113,34 @@ text-bold {
     background: $color-line;
   }
 }
+
+.default-button-box {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  button {
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 88px;
+    justify-content: center;
+    vertical-align: top;
+    margin: 0;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    flex: 1;
+    margin-left: 10px;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+  .primary {
+    background: $color-primary;
+    color: white;
+    &:active {
+      background: $color-primary;
+    }
+  }
+}

@@ -20,23 +20,30 @@ export default class Home extends Component {
 
   componentWillMount () {
     this.fetchData()
+    Taro.eventCenter.on('accountList:refresh', this.refreshData)
   }
 
   componentDidMount () { }
 
-  componentWillUnmount () { }
+  componentWillUnmount () {
+    Taro.eventCenter.off('accountList:refresh', this.refreshData)
+  }
 
   componentDidShow () { }
 
   componentDidHide () { }
 
-  fetchData = async (refresh) => {
+  fetchData = async () => {
     const { AccountStore } = this.props
-    const res = await AccountStore.getAccountBookList()
+    const res = await AccountStore.getAccountList()
     if (res && res.success) {
       let billDetails = res.data
       this.setState({ billDetails })
     }
+  }
+
+  refreshData = () => {
+    this.fetchData()
   }
 
   addAccount = () => {
@@ -48,7 +55,7 @@ export default class Home extends Component {
     const header = <View>
       账户资产
     </View>
-    
+
     return (
       <MyPage
         className='Account'
@@ -74,20 +81,20 @@ export default class Home extends Component {
         </View>
         <View className='account-list'>
           <View className='account-item'>我的账本</View>
-          {billDetails && !!billDetails.length && billDetails.map((item,index)=><View
+          {billDetails && !!billDetails.length && billDetails.map((item, index) => <View
             key={index}
-            onClick={()=>this.handelClick(item)}
+            onClick={() => this.handelClick(item)}
             className='account-item'
           >
             <Image src={item.account_img}></Image>
             {item.name}
           </View>)}
-          <View 
+          <View
             className='account-add'
             onClick={this.addAccount}
           >
             添加账本<MyIcon name='add-1'></MyIcon>
-            </View>
+          </View>
         </View>
       </MyPage>
     )

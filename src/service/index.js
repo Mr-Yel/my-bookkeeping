@@ -4,13 +4,13 @@ export const service = {
   getUserInfo: async () => {
     return await httpService.request({
       name: 'login',
-    }, true)
+    }, false)
   },
 
   setUserInfo: async (data) => {
     return await httpService.request({
       name: 'setUserInfo',
       data
-    })
+    }, true)
   },
 }

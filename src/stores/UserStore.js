@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import { observable } from 'mobx'
 import { service } from '../service'
+import httpService from '../service/httpService'
 import { storage } from '../utils/storage'
 import { uploadAvatar } from '../utils/index'
 import { accountService } from '../service/accountService'
@@ -14,9 +15,12 @@ const UserStore = observable({
   setSysData: {
     statusBarHeight: 0
   },
-  accountList: [],
-  curAccount: {},
+  accountBookList: [],
+  curAccountBook: {},
   async getUserInfo(callback) {
+
+    // this.testFn()
+
     storage
       .get('userInfo')
       .then((res) => {
@@ -34,6 +38,7 @@ const UserStore = observable({
       })
   },
   async setUserInfo(data) {
+    console.log('data',data);
     let userInfo = Object.assign(this.userInfo, data)
     let res = {}
     if (Object.keys(data).includes('picture')) {
@@ -53,16 +58,29 @@ const UserStore = observable({
     }
     this.setSysData = setSysData
   },
-  async getAccountList() {
+  async getAccountBookList() {
     try {
-      let res = await accountService.getAccountList()
+      let res = await accountService.getAccountBookList()
       if (res && res.success) {
-        this.accountList = res.data
-        this.curAccount = res.data.find(e=>e.is_cur_account)
+        this.accountBookList = res.data
+        this.curAccountBook = res.data.find(e=>e.is_cur_account_book)
       }
     } catch (err) {
       console.log(err)
     }
+  },
+
+
+  async testFn() {
+    let res = await httpService.request({
+      name: 'editBill',
+      data: {
+        '_id':'9e70c665648bd870021f37cb16668cc3',
+        'amount': 11,
+        'notes': '测试',
+      }
+    }, true)
+    console.log('testFntestFn',res);
   }
 })
 export default UserStore
