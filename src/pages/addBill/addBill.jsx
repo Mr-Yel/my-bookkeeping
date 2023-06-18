@@ -82,6 +82,7 @@ export default class addBill extends Component {
       if (bill && bill.success) {
         const { data } = bill
         this.curBillType = data.bill_type
+        console.log(this.CustomSoftKeyboard);
         this.CustomSoftKeyboard.updateValue({ notes: data.notes, amount: data.amount })
       }
     }
@@ -161,7 +162,7 @@ export default class addBill extends Component {
           </View>
 
           <View className='footer'>
-            <CustomSoftKeyboard isComplete={(e) => this.isComplete(e)} ref={this.CustomSoftKeyboard}></CustomSoftKeyboard>
+            <CustomSoftKeyboard isComplete={(e) => this.isComplete(e)} ref={(e)=>this.CustomSoftKeyboard=e}></CustomSoftKeyboard>
           </View>
         </MyPage>
       </View>
