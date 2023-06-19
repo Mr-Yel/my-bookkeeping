@@ -25,10 +25,16 @@ export default class addBill extends Component {
     }
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    const { router } = getCurrentInstance()
+    this.id = router?.params?.id
+  }
 
   componentDidMount() {
     this.fetchData()
+    if(this.id) {
+      this.setDefaultData()
+    }
   }
 
   componentWillUnmount() {}
@@ -54,7 +60,6 @@ export default class addBill extends Component {
     const params = {
       bill_type: type
     }
-    const { router } = getCurrentInstance()
     const res = await BillStore.getBillTypes(params)
     if (res && res.success) {
       if (res.data && res.data.length == 0) {
@@ -77,14 +82,15 @@ export default class addBill extends Component {
         curBillTypes
       })
     }
-    if (router.params.id) {
-      const bill = await BillStore.getBillDetail({ _id: router.params.id })
-      if (bill && bill.success) {
-        const { data } = bill
-        this.curBillType = data.bill_type
-        console.log(this.CustomSoftKeyboard);
-        this.CustomSoftKeyboard.updateValue({ notes: data.notes, amount: data.amount })
-      }
+  }
+
+  setDefaultData = async () => {
+    const { BillStore } = this.props
+    const res = await BillStore.getBillDetail({ _id: this.id })
+    if (res && res.success) {
+      const { data } = res
+      this.curBillType = data.bill_type
+      this.CustomSoftKeyboard.updateValue({ ...data })
     }
   }
 
@@ -108,7 +114,6 @@ export default class addBill extends Component {
       BillStore,
       UserStore: { curAccountBook }
     } = this.props
-    const { router } = getCurrentInstance()
     const params = {
       notes: (data && data.notes) || '',
       amount: (data && data.amount) || 0,
@@ -117,7 +122,7 @@ export default class addBill extends Component {
       account_book_id: data.accountBook && data.accountBook._id,
       account_id: curAccountBook._id
     }
-    if (router.params.id) params._id = router.params.id
+    if (this.id) params._id = this.id
     const res = await BillStore.editBill(params)
     if (res && res.success) {
       console.log(res)

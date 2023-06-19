@@ -1,7 +1,7 @@
 import { Component } from 'react'
-import { View, Input, Text, ScrollView, Image } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
-import { MyIcon, MyPopUp } from '@/components'
+import { MyPopUp } from '@/components'
 // import { getNumber, checkString } from '@/utils'
 // import { routerGoBack } from '@/utils/router'
 

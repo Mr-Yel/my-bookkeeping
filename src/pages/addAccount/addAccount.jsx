@@ -56,6 +56,7 @@ export default class addAccount extends Component {
   }
 
   onChange = async (type, e) => {
+    // console.log(type, e);
     switch(type) {
       case 'accountBg':
         console.log(e);
@@ -65,6 +66,7 @@ export default class addAccount extends Component {
         break;
       default:
         const value = e.detail.value
+        // console.log(value);
         this.setState({[type]: value})
         break;
     }

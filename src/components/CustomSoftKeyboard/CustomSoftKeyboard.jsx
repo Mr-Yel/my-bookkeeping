@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
 import { Component } from 'react'
-import { View, Input, Text } from '@tarojs/components'
+import { View, Input, Text, ScrollView, Picker } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { MyIcon } from '@/components'
 import { getNumber, checkString } from '@/utils'
 import { routerGoBack } from '@/utils/router'
 import getKeyboardBtnCrt from './keyboardBtnCrt'
-import SelectButtonBox from './components/SelectButtonBox'
+import AccountPopUpList from './components/AccountPopUpList'
 
 @inject('BillStore', 'UserStore')
 @observer
@@ -21,6 +21,8 @@ export default class CustomSoftKeyboard extends Component {
       accountBook: {},                      // 当前账本
       date: dayjs().format('YYYY/MM/DD'),   // 日期
       time: dayjs().format('HH:mm'),        // 时间
+
+      isAccountBookOpened: false,
     }
   }
 
@@ -35,6 +37,32 @@ export default class CustomSoftKeyboard extends Component {
   componentDidShow() {}
 
   componentDidHide() {}
+  
+  get selectButtons() {
+    const { accountBook, date, time } = this.state
+    return [
+      {
+        name: accountBook && accountBook.name || '请选择账本',
+        onClick: () => this.setState({isAccountBookOpened: true})
+      },
+      {
+        name: <Picker value={time} mode='time' onChange={(e)=>this.onChange('time', e)}>
+          {time ? time : '请选择时间'}
+        </Picker>,
+      },
+      {
+        name: <Picker value={date} mode='date' onChange={(e)=>this.onChange('date', e)}>
+          {date ? dayjs(date).format('YYYY/MM/DD') : '请选择日期'}
+        </Picker>,
+      },
+      // {
+      //   name: '图片',
+      // },
+      // {
+      //   name: '模板',
+      // },
+    ]
+  }
 
   routerGoBack = () => {
     routerGoBack()
@@ -92,7 +120,12 @@ export default class CustomSoftKeyboard extends Component {
       case 'notes':
         let value = e && e.detail && e.detail.value
         this.setState({ [type]: value })
-        break
+        break;
+      case 'time':
+      case 'date':
+        value = e && e.detail && e.detail && e.detail.value
+        this.setState({[type]: value})
+        break;
       default:
         this.setState({ [type]: e })
         break
@@ -100,14 +133,17 @@ export default class CustomSoftKeyboard extends Component {
   }
 
   updateValue = (data) => {
+    console.log('data',data);
     this.setState({ 
       notes: data.notes, 
-      amount: data.amount  
+      amount: data.amount,
+      date: data.date_time ? dayjs(data.date_time).format('YYYY/MM/DD') : dayjs().format('YYYY/MM/DD'),
+      time: data.date_time ? dayjs(data.date_time).format('HH:mm') : dayjs().format('HH:mm'),
     })
   }
 
   render() {
-    const { amount, operationString, notes } = this.state
+    const { amount, operationString, notes, isAccountBookOpened } = this.state
     const { keyboardBtnCrt } = this
 
     return (
@@ -127,7 +163,21 @@ export default class CustomSoftKeyboard extends Component {
             )}
           </View>
         </View>
-        <SelectButtonBox onChange={this.onChange}></SelectButtonBox>
+        <View className='SelectButtonBox'>
+          {this.selectButtons && !!this.selectButtons.length && <View className='select-box'>
+            <ScrollView className='scroll-view_H' scroll-x='true' style='width: 100%'>
+              {
+                this.selectButtons.map((item,index)=><View 
+                  className='scroll-view-item_H' 
+                  key={index}
+                  onClick={item.onClick}
+                >
+                  {item.name}
+                </View>)
+              }
+            </ScrollView>
+          </View>}
+        </View>
         <View className='keyboard-content'>
           {keyboardBtnCrt &&
             keyboardBtnCrt.length &&
@@ -144,6 +194,14 @@ export default class CustomSoftKeyboard extends Component {
               </View>
             ))}
         </View>
+
+
+        <AccountPopUpList 
+          isOpened={isAccountBookOpened}
+          onChange={(e)=>this.onChange('accountBook', e)}
+          onClose={()=>this.setState({isAccountBookOpened: false})}
+        >
+        </AccountPopUpList>
       </View>
     )
   }
