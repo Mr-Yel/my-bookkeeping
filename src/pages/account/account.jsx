@@ -14,19 +14,21 @@ export default class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      billDetails: [],
+      accountDetail: [],
     }
   }
 
   componentWillMount () {
     this.fetchData()
     Taro.eventCenter.on('accountList:refresh', this.refreshData)
+    Taro.eventCenter.on('removeBill:success', this.refreshData)
   }
 
   componentDidMount () { }
 
   componentWillUnmount () {
     Taro.eventCenter.off('accountList:refresh', this.refreshData)
+    Taro.eventCenter.on('removeBill:success', this.refreshData)
   }
 
   componentDidShow () { }
@@ -35,10 +37,11 @@ export default class Home extends Component {
 
   fetchData = async () => {
     const { AccountStore } = this.props
+    
     const res = await AccountStore.getAccountList()
     if (res && res.success) {
-      let billDetails = res.data
-      this.setState({ billDetails })
+      let accountDetail = res.data
+      this.setState({ accountDetail })
     }
   }
 
@@ -51,7 +54,7 @@ export default class Home extends Component {
   }
 
   render () {
-    const { billDetails } = this.state
+    const { accountDetail } = this.state
     const header = <View>
       账户资产
     </View>
@@ -80,8 +83,8 @@ export default class Home extends Component {
           </View>
         </View>
         <View className='account-list'>
-          <View className='account-item'>我的账本</View>
-          {billDetails && !!billDetails.length && billDetails.map((item, index) => <View
+          <View className='account-item'>我的账户</View>
+          {accountDetail && !!accountDetail.length && accountDetail.map((item, index) => <View
             key={index}
             onClick={() => this.handelClick(item)}
             className='account-item'
@@ -93,7 +96,7 @@ export default class Home extends Component {
             className='account-add'
             onClick={this.addAccount}
           >
-            添加账本<MyIcon name='add-1'></MyIcon>
+            添加账户<MyIcon name='add-1'></MyIcon>
           </View>
         </View>
       </MyPage>

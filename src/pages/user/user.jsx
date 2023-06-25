@@ -27,6 +27,10 @@ export default class User extends Component {
     routerGoIn(`/pages/billCategory/billCategory`)
   }
 
+  goBudgetEdit = () => {
+    routerGoIn(`/pages/budgetEdit/budgetEdit`)
+  }
+
   render() {
     const {
       UserStore: { userInfo }
@@ -51,6 +55,10 @@ export default class User extends Component {
           <view className='function-list-item' onClick={this.goCategory}>
             <MyIcon name='yingyong'></MyIcon>
             <Text className='function-list-name'>分类管理</Text>
+          </view>
+          <view className='function-list-item' onClick={this.goBudgetEdit}>
+            <MyIcon name='budget-1'></MyIcon>
+            <Text className='function-list-name'>预算管理</Text>
           </view>
         </view>
       </view>

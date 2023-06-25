@@ -1,6 +1,6 @@
 import Taro from "@tarojs/taro";
 import { ENV } from '../config/index'
-import UserStore from "../stores/UserStore";
+import AccountStore from "../stores/AccountStore";
 
 /**
  * 基于 wx.cloud 的 请求拦截器和响应拦截器
@@ -30,7 +30,7 @@ class HttpService {
       beforeRequest (configs) {
         configs.data = {
           ...configs.data,
-          account_book_id: UserStore.curAccountBook && UserStore.curAccountBook._id,
+          account_book_id: AccountStore.curAccountBook && AccountStore.curAccountBook._id,
         }
         if (configs && configs.refresh == false) {
           return configs

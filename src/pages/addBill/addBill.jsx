@@ -13,7 +13,7 @@ const enumBillType = {
   1: 'in'
 }
 
-@inject('BillStore', 'UserStore')
+@inject('BillStore', 'UserStore', 'AccountStore')
 @observer
 export default class addBill extends Component {
   constructor(props) {
@@ -112,7 +112,7 @@ export default class addBill extends Component {
   isComplete = async (data) => {
     const {
       BillStore,
-      UserStore: { curAccountBook }
+      AccountStore: { curAccountBook }
     } = this.props
     const params = {
       notes: (data && data.notes) || '',
@@ -126,7 +126,7 @@ export default class addBill extends Component {
     const res = await BillStore.editBill(params)
     if (res && res.success) {
       console.log(res)
-      Taro.eventCenter.trigger('homeList:refresh')
+      Taro.eventCenter.trigger('addBill:success')
       routerGoBack()
     }
   }

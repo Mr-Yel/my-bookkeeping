@@ -46,16 +46,24 @@ export default class BillsDateCard extends Component {
     }
   }
 
-  openActionSheet = (bill_id) => {
+  removeBill = async  (bill_id) => {
+    const { BillStore: { removeBill } } = this.props
+    const res = await removeBill({_id: bill_id})
+    if(res && res.success) {
+      Taro.eventCenter.trigger('removeBill:success')
+    }
+  }
+
+  openActionSheet = async (bill_id) => {
     Taro.showActionSheet({
       itemList: ['编辑账单', '删除账单'],
-      success: function (res) {
+      success: async (res) => {
         switch (res.tapIndex) {
           case 0:
             routerGoIn(`/pages/addBill/addBill?id=${bill_id}`)
             break
           case 1:
-            console.log('删除账单')
+            this.removeBill(bill_id)
             break
         }
       },

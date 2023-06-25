@@ -13,17 +13,21 @@ exports.main = async (event, context) => {
   const openid = wxContext.OPENID
   console.log(event);
   try {
-    if(!event.showDetail) {
-      const res = await accountCollection
-        .where({
-          account_book_id: event.account_book_id
-        })
-        .get();
+    if(!event.account_book_id) {
       return {
-        success: true,
-        data: res && res.data,
+        success: false,
+        errMsg: '缺少账本id',
       };
     }
+    const res = await accountCollection
+      .where({
+        account_book_id: event.account_book_id
+      })
+      .get();
+    return {
+      success: true,
+      data: res && res.data,
+    };
   } catch (err) {
     console.log(err)
     return {

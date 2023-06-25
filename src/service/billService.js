@@ -39,5 +39,15 @@ export const billService = {
       },
       true
     )
+  },
+
+  removeBill: async (data) => {
+    return await httpService.request(
+      {
+        name: 'removeBill',
+        data
+      },
+      true
+    )
   }
 }

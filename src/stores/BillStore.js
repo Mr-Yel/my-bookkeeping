@@ -15,6 +15,7 @@ const billStore = observable({
 
   async getBillTypes(params) {
     let res = await billService.getBillTypes(params)
+    console.log('getBillTypes',res);
     return res
   },
 
@@ -25,6 +26,11 @@ const billStore = observable({
 
   async editBill(params) {
     let res = await billService.editBill(params)
+    return res
+  },
+
+  async removeBill(params) {
+    let res = await billService.removeBill(params)
     return res
   }
 })

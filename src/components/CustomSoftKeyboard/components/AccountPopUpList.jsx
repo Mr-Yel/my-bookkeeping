@@ -12,7 +12,7 @@ export default class AccountPopUpList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accountBooks: [],       // 所有账本
+      accounts: [],       // 所有账户
     };
   }
 
@@ -29,15 +29,9 @@ export default class AccountPopUpList extends Component {
   componentDidHide () { }
 
   fetchData = async () => {
-    const { AccountStore, onChange } = this.props
-    const res = await AccountStore.getAccountList()
-    console.log(res);
-    if(res && res.data) {
-      this.setState({accountBooks: res.data})
-      if(res.data.length) {
-        onChange && onChange(res.data[0])
-      }
-    }
+    const { AccountStore: { accounts }, onChange } = this.props
+    this.setState({accounts: accounts})
+    onChange && onChange(accounts && accounts[0] || {})
   }
 
   handelClick = (item) => {
@@ -47,7 +41,7 @@ export default class AccountPopUpList extends Component {
   }
 
   render () {
-    const { accountBooks } = this.state
+    const { accounts } = this.state
     const { isOpened } = this.props
     return (
       <View className='AccountPopUpList'>
@@ -56,7 +50,7 @@ export default class AccountPopUpList extends Component {
           title='我的账本'
           onClose={this.props.onClose}
         >
-          {accountBooks && !!accountBooks.length && accountBooks.map((item,index)=><View
+          {accounts && !!accounts.length && accounts.map((item,index)=><View
             key={index}
             onClick={()=>this.handelClick(item)}
             className='account-item'
@@ -64,7 +58,7 @@ export default class AccountPopUpList extends Component {
             <Image src={item.account_img}></Image>
             {item.name}
           </View>)}
-          {!accountBooks || accountBooks.length ==0 && <View>不存在账本数据</View>}
+          {!accounts || accounts.length ==0 && <View>不存在账本数据</View>}
         </MyPopUp>
       </View>
     )

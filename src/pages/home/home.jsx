@@ -27,15 +27,16 @@ export default class Home extends Component {
   componentWillMount () { }
 
   async componentDidMount () {
-    const { UserStore } = this.props
-    await UserStore.getUserInfo()
-    await UserStore.getAccountBookList() // 获取用户账户列表
-    this.fetchData()
-    Taro.eventCenter.on('homeList:refresh', this.refreshData)
+    Taro.eventCenter.on('init:success', ()=>{
+      this.fetchData()
+    })
+    Taro.eventCenter.on('addBill:success', this.refreshData)
+    Taro.eventCenter.on('removeBill:success', this.refreshData)
   }
 
   componentWillUnmount () {
-    Taro.eventCenter.off('homeList:refresh', this.refreshData)
+    Taro.eventCenter.off('addBill:success', this.refreshData)
+    Taro.eventCenter.on('removeBill:success', this.refreshData)
   }
 
   componentDidShow () { }

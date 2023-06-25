@@ -16,10 +16,9 @@ const stores = {
 class App extends Component {
 
   async componentWillMount() {
-    // await UserStore.getUserInfo()
-    // await UserStore.getAccountList()  // 获取用户账户列表
-    AccountStore.getAccountList()   // 获取用户账单
-    await UserStore.getSysInfo()
+    this.init(()=>{
+      Taro.eventCenter.trigger('init:success')
+    })
   }
 
   componentDidMount () {}
@@ -27,6 +26,14 @@ class App extends Component {
   componentDidShow () {}
 
   componentDidHide () {}
+
+  async init (callback) {
+    await UserStore.getUserInfo()
+    await AccountStore.getAccountBookList()  // 获取用户账本列表
+    Promise.all[AccountStore.getAccountList()]    // 获取用户账单 // 获取用户账户列表
+    UserStore.getSysInfo()
+    callback()
+  }
 
   render () {
     // this.props.children 是将要会渲染的页面

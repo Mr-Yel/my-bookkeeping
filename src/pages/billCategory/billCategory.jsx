@@ -1,10 +1,10 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Text, Draggable, MovableArea, MovableView } from '@tarojs/components'
+import { View, Text, MovableArea, MovableView } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { MyPage, MyIcon } from '@/components'
-import { routerGoIn } from '@/utils/router'
-import { AmountType } from '@/enum'
+import { routerGoBack } from '@/utils/router'
+
 const enumBillType = {
   out: 0,
   in: 1,
@@ -47,7 +47,7 @@ export default class billCategory extends Component {
   }
 
   componentWillUnmount() {
-    Taro.eventCenter.off('homeList:refresh', this.refreshData)
+    
   }
 
   componentDidShow() {}
@@ -161,7 +161,7 @@ export default class billCategory extends Component {
   }
 
   refreshData = () => {
-    this.setState({ activeTab: 0, billDetails: [] }, () => this.fetchData())
+    this.setState({ activeTab: 0 }, () => this.fetchData())
   }
 
   changeBillType = (type) => {
@@ -208,6 +208,7 @@ export default class billCategory extends Component {
           { label: '收入', type: 'in' }
         ].map((item, index) => (
           <View
+            key={index}
             className={`tabs-item ${activeTab == index ? 'active' : ''}`}
             onClick={() => this.changeBillType(item.type)}
           >
@@ -237,7 +238,7 @@ export default class billCategory extends Component {
           >
             <MovableView
               y={movableViewInfo.y}
-              outOfBounds={true}
+              outOfBounds
               direction='vertical'
               className='billCategory-list-item-move'
               style={{ height: `${pageInfo.rowHeight}px` }}

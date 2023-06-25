@@ -7,7 +7,8 @@ export default defineAppConfig({
     'pages/addBill/addBill',
     'pages/account/account',
     'pages/addAccount/addAccount',
-    'pages/billCategory/billCategory'
+    'pages/billCategory/billCategory',
+    'pages/budgetEdit/budgetEdit'
   ],
   window: {
     backgroundTextStyle: 'light',

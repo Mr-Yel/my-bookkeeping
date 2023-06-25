@@ -4,7 +4,6 @@ import { service } from '../service'
 import httpService from '../service/httpService'
 import { storage } from '../utils/storage'
 import { uploadAvatar } from '../utils/index'
-import { accountService } from '../service/accountService'
 
 const UserStore = observable({
   userInfo: {
@@ -15,8 +14,6 @@ const UserStore = observable({
   setSysData: {
     statusBarHeight: 0
   },
-  accountBookList: [],
-  curAccountBook: {},
   async getUserInfo(callback) {
 
     // this.testFn()
@@ -57,17 +54,6 @@ const UserStore = observable({
       ...info
     }
     this.setSysData = setSysData
-  },
-  async getAccountBookList() {
-    try {
-      let res = await accountService.getAccountBookList()
-      if (res && res.success) {
-        this.accountBookList = res.data
-        this.curAccountBook = res.data.find(e=>e.is_cur_account_book)
-      }
-    } catch (err) {
-      console.log(err)
-    }
   },
 
 

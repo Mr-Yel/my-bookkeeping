@@ -4,6 +4,8 @@ import { accountService } from "../service/accountService";
 
 const accountStore = observable({
   accounts: [], // 账户
+  accountBookList: [],
+  curAccountBook: {},
 
   async getAccountList(params) {
     let res = await accountService.getAccountList(params)
@@ -15,6 +17,17 @@ const accountStore = observable({
   async editAccount(params) {
     let res = await accountService.editAccount(params)
     return res
-  }
+  },
+  async getAccountBookList() {
+    try {
+      let res = await accountService.getAccountBookList()
+      if (res && res.success) {
+        this.accountBookList = res.data
+        this.curAccountBook = res.data.find(e=>e.is_cur_account_book)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  },
 });
 export default accountStore;
