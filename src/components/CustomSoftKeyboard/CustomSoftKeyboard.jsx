@@ -94,6 +94,7 @@ export default class CustomSoftKeyboard extends Component {
   keyboardClick = (item) => {
     const { operationString, curOperator } = this.state
     let string = operationString
+    let length = string.length
     if (item.type == 'complete') {
       // 完成
       this.isComplete()
@@ -108,6 +109,9 @@ export default class CustomSoftKeyboard extends Component {
       this.updating(string)
     } else if (item.type == 'punctuation' && (curOperator || string.length == 0)) {
       // 小数点并且最后一位为操作符或者长度0
+      return
+    }else if (item.type == 'number' && string.includes('.') && length >= 4 && parseInt(string[length-1]) && parseInt(string[length-2]) && string[length-3]=='.') {
+      // 存在小数点并且为小数点之后第三次添加数字
       return
     } else {
       string = string + item.value
