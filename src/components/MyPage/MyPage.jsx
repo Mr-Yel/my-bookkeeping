@@ -10,50 +10,60 @@ export default class MyPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      dragStyle: { //下拉框的样式
+      dragStyle: {
+        //下拉框的样式
         top: '30px',
         transition: `all 1s`
-      },
+      }
     }
   }
 
-  componentWillMount () { }
+  componentWillMount() {}
 
-  componentDidMount () { }
+  componentDidMount() {}
 
-  componentWillUnmount () { }
+  componentWillUnmount() {}
 
-  componentDidShow () { }
+  componentDidShow() {}
 
-  componentDidHide () { }
+  componentDidHide() {}
 
   routerGoBack = () => {
     routerGoBack()
   }
 
-  render () {
-    const { dragStyle } = this.state;
-    const { canGoBack, leftContent, titleContent, rightContent, children, className,
-      UserStore: { setSysData: { statusBarHeight } } } = this.props
+  render() {
+    const { dragStyle } = this.state
+    const {
+      canGoBack,
+      leftContent,
+      titleContent,
+      rightContent,
+      children,
+      className,
+      UserStore: {
+        setSysData: { statusBarHeight }
+      }
+    } = this.props
     return (
       <View className={`MyPage ${className || ''}`}>
         <View className='MyTitle' style={`paddingTop: ${statusBarHeight}px;`}>
-          {leftContent && <View className='title-left'>{leftContent}</View>}
-          {canGoBack && !leftContent && <View className='title-left' onClick={this.routerGoBack}>
-            <MyIcon name='return'></MyIcon>
-          </View>}
-          <View className='title-content'>
-            {titleContent}
-          </View>
-          <View className='title-right'>
-            {rightContent}
+          <View className='title'>
+            {leftContent && <View className='title-left'>{leftContent}</View>}
+            {canGoBack && !leftContent && (
+              <View className='title-left' onClick={this.routerGoBack}>
+                <MyIcon name='return'></MyIcon>
+              </View>
+            )}
+            <View className='title-content'>{titleContent}</View>
+            <View className='title-right'>{rightContent}</View>
           </View>
         </View>
         <View className='MyContent'>
           {/* <ScrollView
             style={dragStyle}
           > */}
-            {children}
+          {children}
           {/* </ScrollView> */}
         </View>
       </View>
