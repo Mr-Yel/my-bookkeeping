@@ -23,6 +23,7 @@
   name 必填 String 账本名称,
   account_book_img 非必填 String 账本图片,
   property 必填 Number 账本余额，
+  bill_types_use_by 必填 默认值 1, 1 使用账本关联的类型 2 使用个人关联的类型
 }
 ```
 ### 账单表 bills
@@ -45,6 +46,25 @@
   bill_type_color String 类型颜色,
   bill_type_icon String 类型icon,
   bill_type_name String 类型名称，
+}
+```
+### 预算表 budget
+```js
+{
+  _id (主键) String 唯一key,
+  account_book_id 必填 String 关联账本,
+  openid 必填 String 关联用户,
+  bill_type_id 非必填 String 关联账单类型 预留字段，用于之后方便新增分类预算功能,
+  property 必填 String 每月预算，
+}
+```
+### 账单类型中间表 users_or_account_book_bill_types
+```js
+{
+  _id (主键) String 唯一key,
+  account_book_id 非必填 String 关联账本,
+  openid 非必填 String 关联用户,
+  bill_type_id 必填 String 关联账单类型
 }
 ```
 
