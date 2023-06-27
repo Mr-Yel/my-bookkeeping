@@ -19,12 +19,17 @@ export default class billCategory extends Component {
     super(props)
     this.state = {
       activeTab: 0,
+      activeType: 'out',
       list: [[], []],
       // 拖动相关参数
+      dragFlag: false,
+      longpressFlag: false,
       movableViewInfo: {
         y: 0,
         showClass: 'none',
-        data: {}
+        // data: {}
+        bill_type_icon: '',
+        bill_type_name: ''
       },
       pageInfo: {
         rowHeight: 64,
@@ -46,9 +51,7 @@ export default class billCategory extends Component {
     // this.initTranslateY()
   }
 
-  componentWillUnmount() {
-    
-  }
+  componentWillUnmount() {}
 
   componentDidShow() {}
 
@@ -84,10 +87,9 @@ export default class billCategory extends Component {
 
   dragStart = (event) => {
     const { list, activeTab, pageInfo, movableViewInfo } = this.state
-    let startIndex = event.target.dataset.index
-    console.log('获取到的元素为', list[activeTab][startIndex])
+    let startIndex = event.currentTarget.dataset.index
+    // console.log('获取到的元素为', list[activeTab][startIndex])
     // 初始化页面数据
-    console.log(event)
     pageInfo.startY = event.touches[0].clientY
     pageInfo.readyPlaceIndex = startIndex
     pageInfo.selectedIndex = startIndex
@@ -99,18 +101,24 @@ export default class billCategory extends Component {
     //   movableViewInfo: Object.assign(movableViewInfo, y)
     // })
     // 初始化拖动控件数据
-    movableViewInfo.data = list[activeTab][startIndex]
+    // movableViewInfo.data = list[activeTab][startIndex]
+    movableViewInfo.bill_type_icon = list[activeTab][startIndex].bill_type_icon
+    movableViewInfo.bill_type_name = list[activeTab][startIndex].bill_type_name
     movableViewInfo.showClass = 'inline'
     movableViewInfo.y = pageInfo.startY - pageInfo.rowHeight / 2
+    // console.log(movableViewInfo, pageInfo)
 
     this.setState({
+      dragFlag: true,
+      longpressFlag: true,
       movableViewInfo: movableViewInfo,
       pageInfo: pageInfo
     })
   }
 
   dragMove = (event) => {
-    const { list, activeTab, movableViewInfo, pageInfo } = this.state
+    const { list, activeTab, movableViewInfo, pageInfo, longpressFlag } = this.state
+    if (!longpressFlag) return
     // 计算拖拽距离
     let movedDistance = event.touches[0].clientY - pageInfo.startY
     movableViewInfo.y = pageInfo.startY - pageInfo.rowHeight / 2 + movedDistance
@@ -144,7 +152,8 @@ export default class billCategory extends Component {
   }
 
   dragEnd = (event) => {
-    const { pageInfo, movableViewInfo } = this.state
+    let { pageInfo, movableViewInfo, longpressFlag } = this.state
+    if (!longpressFlag) return
     // 重置页面数据
     pageInfo.readyPlaceIndex = null
     pageInfo.startY = null
@@ -153,20 +162,62 @@ export default class billCategory extends Component {
     pageInfo.scrollY = true
     // 隐藏movableView
     movableViewInfo.showClass = 'none'
+    // 将长按标记设为否
+    longpressFlag = false
 
     this.setState({
+      longpressFlag,
       pageInfo,
       movableViewInfo
     })
   }
 
-  refreshData = () => {
-    this.setState({ activeTab: 0 }, () => this.fetchData())
+  saveList = () => {
+    console.log('保存')
+    // 调用接口
+    Taro.showModal({
+      title: '提示',
+      content: '确认保存此列表排序吗？',
+      success: (res) => {
+        if (res.confirm) {
+          this.setState({
+            dragFlag: false
+          })
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+  }
+
+  /**
+   *
+   * @param {*} refreshType 为1时刷新列表至初始状态，为2刷新当前列表
+   */
+  refreshData = (refreshType = 1) => {
+    const { activeType } = this.state
+    if (refreshType === 1) this.setState({ activeTab: 0 }, () => this.fetchData())
+    else {
+      Taro.showModal({
+        title: '提示',
+        content: '确认重置此列表排序吗？',
+        success: (res) => {
+          if (res.confirm) {
+            this.setState(() => this.fetchData(activeType))
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
+    }
   }
 
   changeBillType = (type) => {
     // console.log(type)
     const { activeTab, list } = this.state
+    this.setState({
+      activeType: type
+    })
     if (enumBillType[type] == activeTab) return
     if (list[enumBillType[type]] && list[enumBillType[type]].length) {
       this.setState({ activeTab: enumBillType[type] })
@@ -176,13 +227,14 @@ export default class billCategory extends Component {
   }
 
   render() {
-    const { list, activeTab, movableViewInfo, pageInfo } = this.state
+    const { list, activeTab, dragFlag, movableViewInfo, pageInfo } = this.state
     const renderItem = (item, index) => {
       return (
         <View
           key={item._id}
           className={`billCategory-list-item ${pageInfo.readyPlaceIndex === index ? 'ready-place' : null}`}
           data-index={index}
+          // onTouchStart={this.dragStart}
           onLongPress={this.dragStart}
           onTouchMove={this.dragMove}
           onTouchEnd={this.dragEnd}
@@ -227,6 +279,20 @@ export default class billCategory extends Component {
             </View>
             <View className='billCategory-list-right'>
               <Text className='billCategory-list-right-button'>编辑</Text>
+              <Text
+                className='billCategory-list-right-button'
+                style={{ display: `${dragFlag ? 'inline' : 'none'}` }}
+                onClick={this.saveList}
+              >
+                保存
+              </Text>
+              <Text
+                className='billCategory-list-right-button'
+                style={{ display: `${dragFlag ? 'inline' : 'none'}` }}
+                onClick={() => this.refreshData(2)}
+              >
+                重置
+              </Text>
             </View>
           </View>
           <scroll-view scroll-y={pageInfo.scrollY} style={{ height: `${pageInfo.scrollHeight}%` }}>
@@ -237,7 +303,7 @@ export default class billCategory extends Component {
             style={{ display: `${movableViewInfo.showClass}`, height: `${pageInfo.scrollHeight}%` }}
           >
             <MovableView
-              y={movableViewInfo.y}
+              y={movableViewInfo.y - 96}
               outOfBounds
               direction='vertical'
               className='billCategory-list-item-move'
@@ -245,10 +311,10 @@ export default class billCategory extends Component {
             >
               <View className='billCategory-list-icon'>
                 <View style={{ paddingLeft: '24rpx', paddingTop: '12rpx' }}>
-                  <MyIcon name={movableViewInfo.data.bill_type_icon}></MyIcon>
+                  <MyIcon name={movableViewInfo.bill_type_icon}></MyIcon>
                 </View>
               </View>
-              <Text className='billCategory-list-name'>{movableViewInfo.data.bill_type_name}</Text>
+              <Text className='billCategory-list-name'>{movableViewInfo.bill_type_name}</Text>
             </MovableView>
           </MovableArea>
         </View>
