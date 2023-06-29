@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { View, Text, MovableArea, MovableView } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { MyPage, MyIcon } from '@/components'
-import { routerGoBack } from '@/utils/router'
+import { routerGoIn, routerGoBack } from '@/utils/router'
 
 const enumBillType = {
   out: 0,
@@ -21,6 +21,10 @@ export default class billCategory extends Component {
       activeTab: 0,
       activeType: 'out',
       list: [[], []],
+      // 是否编辑
+      editStatus: false,
+      // 选中的分类编辑列表
+      selectEditList: [],
       // 拖动相关参数
       dragFlag: false,
       longpressFlag: false,
@@ -84,7 +88,7 @@ export default class billCategory extends Component {
       })
     }
   }
-
+  // 列表项拖动相关函数
   dragStart = (event) => {
     const { list, activeTab, pageInfo, movableViewInfo } = this.state
     let startIndex = event.currentTarget.dataset.index
@@ -151,7 +155,7 @@ export default class billCategory extends Component {
     })
   }
 
-  dragEnd = (event) => {
+  dragEnd = () => {
     let { pageInfo, movableViewInfo, longpressFlag } = this.state
     if (!longpressFlag) return
     // 重置页面数据
@@ -171,7 +175,9 @@ export default class billCategory extends Component {
       movableViewInfo
     })
   }
-
+  /**
+   * 保存排序
+   */
   saveList = () => {
     console.log('保存')
     // 调用接口
@@ -191,7 +197,7 @@ export default class billCategory extends Component {
   }
 
   /**
-   *
+   * 刷新列表
    * @param {*} refreshType 为1时刷新列表至初始状态，为2刷新当前列表
    */
   refreshData = (refreshType = 1) => {
@@ -211,23 +217,80 @@ export default class billCategory extends Component {
       })
     }
   }
-
+  /**
+   * 点击tab栏项
+   * @param {*} type
+   * @returns
+   */
   changeBillType = (type) => {
     // console.log(type)
     const { activeTab, list } = this.state
     this.setState({
-      activeType: type
+      activeType: type,
+      editStatus: false
     })
     if (enumBillType[type] == activeTab) return
     if (list[enumBillType[type]] && list[enumBillType[type]].length) {
-      this.setState({ activeTab: enumBillType[type] })
+      this.setState({ activeTab: enumBillType[type], editStatus: false })
       return
     }
     this.fetchData(type)
   }
+  /**
+   * 点击添加按钮
+   */
+  addBillCategory = () => {
+    const { activeTab } = this.state
+    routerGoIn(`/pages/addBillCategory/addBillCategory?type=${activeTab}&editType=0`)
+  }
+  /**
+   * 跳转分类编辑页面
+   * @param {*} id 跳转编辑页面所需id
+   */
+  goEditOrSelect = (id) => {
+    const { selectEditList, editStatus } = this.state
+    if (!editStatus) {
+      routerGoIn(`/pages/addBillCategory/addBillCategory?id=${id}`)
+    } else {
+      let index = selectEditList.findIndex((item) => item === id)
+      if (index !== -1) selectEditList.splice(index, 1)
+      else selectEditList.push(id)
+      this.setState({
+        selectEditList: selectEditList
+      })
+    }
+  }
+  /**
+   * 点击列表表头编辑按钮
+   */
+  editCategory = () => {
+    const { editStatus, selectEditList } = this.state
+    this.setState({
+      editStatus: !editStatus,
+      selectEditList: editStatus ? [] : selectEditList
+    })
+  }
+  /**
+   * 选中列表项进行操作
+   */
+  handleSelectItem = async () => {
+    const { selectEditList } = this.state
+    Taro.showModal({
+      title: '提示',
+      content: '确认删除选中的分类吗？',
+      success: (res) => {
+        if (res.confirm) {
+          // 调用删除接口
+          console.log('删除')
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+  }
 
   render() {
-    const { list, activeTab, dragFlag, movableViewInfo, pageInfo } = this.state
+    const { list, editStatus, activeTab, dragFlag, movableViewInfo, pageInfo, selectEditList } = this.state
     const renderItem = (item, index) => {
       return (
         <View
@@ -238,18 +301,29 @@ export default class billCategory extends Component {
           onLongPress={this.dragStart}
           onTouchMove={this.dragMove}
           onTouchEnd={this.dragEnd}
+          onClick={() => this.goEditOrSelect(item._id)}
           style={{
             height: `${pageInfo.rowHeight}px`
             //   boxSizing: 'border-box',
             //   transform: `translateY(${this.state.translateY[index]}px);`
           }}
         >
-          <View className='billCategory-list-icon'>
-            <View style={{ paddingLeft: '24rpx', paddingTop: '12rpx' }}>
-              <MyIcon name={item.bill_type_icon}></MyIcon>
+          <View className='billCategory-list-item-left'>
+            <View className='billCategory-list-icon'>
+              <View style={{ paddingLeft: '24rpx', paddingTop: '12rpx' }}>
+                <MyIcon name={item.bill_type_icon}></MyIcon>
+              </View>
             </View>
+            <View className='billCategory-list-name'>{item.bill_type_name}</View>
           </View>
-          <Text className='billCategory-list-name'>{item.bill_type_name}</Text>
+          <View
+            className={`billCategory-list-item-right ${
+              selectEditList && selectEditList.length && selectEditList.includes(item._id)
+                ? 'billCategory-list-item-right-active'
+                : ''
+            }`}
+            style={{ display: `${editStatus ? 'block' : 'none'}` }}
+          ></View>
         </View>
       )
     }
@@ -269,8 +343,17 @@ export default class billCategory extends Component {
         ))}
       </View>
     )
+    const footer =
+      selectEditList && selectEditList.length ? (
+        <View className='billCategory-footer'>
+          <View className='billCategory-footer-text'>{`已选择${selectEditList.length}个分类`}</View>
+          <View className='billCategory-footer-btn' onClick={this.handleSelectItem}>
+            删除
+          </View>
+        </View>
+      ) : null
     return (
-      <MyPage canGoBack className='billCategory' titleContent={header}>
+      <MyPage canGoBack className='billCategory' titleContent={header} footer={footer}>
         <View className='billCategory-list'>
           <View className='billCategory-list-header'>
             <View className='billCategory-list-left'>
@@ -278,20 +361,26 @@ export default class billCategory extends Component {
               <Text className='billCategory-list-left-tips'>长按拖动排序</Text>
             </View>
             <View className='billCategory-list-right'>
-              <Text className='billCategory-list-right-button'>编辑</Text>
               <Text
                 className='billCategory-list-right-button'
-                style={{ display: `${dragFlag ? 'inline' : 'none'}` }}
+                style={{ marginRight: `${dragFlag ? '16rpx' : '0'}` }}
+                onClick={this.editCategory}
+              >
+                {editStatus ? '取消' : '编辑'}
+              </Text>
+              <Text
+                className='billCategory-list-right-button'
+                style={{ display: `${dragFlag ? 'inline' : 'none'}`, marginRight: `${dragFlag ? '16rpx' : '0'}` }}
                 onClick={this.saveList}
               >
-                保存
+                保存排序
               </Text>
               <Text
                 className='billCategory-list-right-button'
                 style={{ display: `${dragFlag ? 'inline' : 'none'}` }}
                 onClick={() => this.refreshData(2)}
               >
-                重置
+                重置排序
               </Text>
             </View>
           </View>
@@ -318,11 +407,13 @@ export default class billCategory extends Component {
             </MovableView>
           </MovableArea>
         </View>
-        <View className='billCategory-add'>
-          <View style={{ paddingLeft: '20rpx' }}>
-            <MyIcon name='add-3'></MyIcon>
+        {!editStatus ? (
+          <View className='billCategory-add' onClick={this.addBillCategory}>
+            <View style={{ paddingLeft: '18rpx' }}>
+              <MyIcon name='add-3'></MyIcon>
+            </View>
           </View>
-        </View>
+        ) : null}
       </MyPage>
     )
   }

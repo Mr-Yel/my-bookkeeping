@@ -40,6 +40,7 @@ export default class MyPage extends Component {
       titleContent,
       rightContent,
       children,
+      footer,
       className,
       UserStore: {
         setSysData: { statusBarHeight }
@@ -66,6 +67,7 @@ export default class MyPage extends Component {
           {children}
           {/* </ScrollView> */}
         </View>
+        {footer ? <View className='MyFooter'>{footer}</View> : null}
       </View>
     )
   }
