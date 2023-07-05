@@ -65,7 +65,24 @@ export default class addBill extends Component {
 
   componentDidHide() {}
 
-  fetchData = async () => {}
+  fetchData = async () => {
+    const { iconList } = this.state
+    const { BillStore  } = this.props
+    const res = await BillStore.getBillTypeDetail({_id: this.id}) 
+    if(res && res.success) {
+      const typeData = res.data
+      
+      this.setState({
+        selectIndex: iconList.findIndex(e=>e.icon == typeData.bill_type_icon),
+        category: {
+          icon: typeData.bill_type_icon,
+          name: typeData.bill_type_name,
+          color: typeData.bill_type_color,
+        }
+      })
+    }
+  }
+
   /**
    * 设置标题
    * @param {*} editType 0为添加分类，1为编辑分类
@@ -75,6 +92,7 @@ export default class addBill extends Component {
       title: editType === 0 ? titleType[this.type] : '编辑分类'
     })
   }
+  
   /**
    * 选择图标颜色
    * @param {*} index 颜色下标
@@ -86,6 +104,7 @@ export default class addBill extends Component {
       category: Object.assign(category, { color: colorList[index] })
     })
   }
+
   /**
    * 选择图标
    * @param {*} index 图标下标
@@ -97,11 +116,39 @@ export default class addBill extends Component {
       category: Object.assign(iconList[index], { color: colorList[selectColorIndex] })
     })
   }
+
+  /**
+   * 修改名称
+   * @param {*} index 图标下标
+   */
+  onChange = (e) => {
+    const { category } = this.state
+    this.setState({
+      category: Object.assign({...category}, {name: e.detail.value})
+    })
+  }
+
   /**
    * 提交新增、编辑结果保存
    */
   submitBillCategory = async () => {
-    console.log('提交')
+    const { BillStore } = this.props
+    const { category } = this.state
+    const params = {
+      _id: this.id,
+      bill_type: this.type == 0 ? 'out' : 'in' || 'out',
+      bill_type_color: category.color || '',
+      bill_type_icon: category.icon || '',
+      bill_type_name: category.name || '',
+    }
+    const res = await BillStore.editBillTypes(params)
+    if(res && res.success) {
+      await Taro.showToast({
+        title: '成功'
+      })
+      Taro.eventCenter.trigger('billTypesList:refresh')
+      routerGoBack()
+    }
   }
 
   render() {
@@ -116,6 +163,7 @@ export default class addBill extends Component {
       colorList.length &&
       colorList.map((item, index) => (
         <View
+          key={index}
           className='name-edit-color-item'
           style={{ backgroundColor: `${item}` }}
           onClick={() => this.selectColor(index)}
@@ -133,7 +181,7 @@ export default class addBill extends Component {
                     <MyIcon name={category.icon}></MyIcon>
                   </View>
                 </View>
-                <Input value={category.name} type='text' maxLength='10' className='name-edit-name' />
+                <Input value={category.name} onInput={(e) => this.onChange(e)} type='text' maxLength='10' className='name-edit-name' />
               </View>
               <View className='name-edit-color'>{colorListView}</View>
             </View>

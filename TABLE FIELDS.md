@@ -63,6 +63,7 @@
 ```js
 {
   _id (主键) String 唯一key,
+  bill_type 必填 String 账单类型,
   account_book_id 非必填 String 关联账本,
   openid 非必填 String 关联用户,
   bill_type_id 必填 String 关联账单类型 ,

@@ -24,13 +24,15 @@ exports.main = async (event, context) => {
     if(billTypesUseBy === 1) {
       // 使用个人关联的类型
       usersOrAccountBookBillTypesRes = await usersOrAccountBookBillTypesCollection.where({
-        openid
-      }).orderBy('sort', 'desc').get()  // orderBy 方法按 sort 从大到小排序
+        openid,
+        bill_type,
+      }).orderBy('sort', 'asc').get()  // orderBy 方法按 sort 从小到大排序
     } else if (billTypesUseBy === 2) {
       // 使用账本关联的类型
       usersOrAccountBookBillTypesRes = await usersOrAccountBookBillTypesCollection.where({
-        account_book_id
-      }).orderBy('sort', 'desc').get()  // orderBy 方法按 sort 从大到小排序
+        account_book_id,
+        bill_type,
+      }).orderBy('sort', 'asc').get()  // orderBy 方法按 sort 从小到大排序
     } else {
       throw new Error('不支持的bill_types_use_by类型')
     }
@@ -38,17 +40,18 @@ exports.main = async (event, context) => {
     console.log(usersOrAccountBookBillTypesRes);
 
     const typeIds = usersOrAccountBookBillTypesRes.data.map(e=>e.bill_type_id)
-    
+
     const getBillTypeByIdsRes = await billTypesCollection.where({
-      _id: db.command.in(typeIds),
-      bill_type,
+      _id: db.command.in(typeIds)
     }).get();
 
     console.log(getBillTypeByIdsRes.data);
 
+    const sortedResult = typeIds.map(id => getBillTypeByIdsRes.data.find(item => item._id === id));
+
     return {
       success: true,
-      data: getBillTypeByIdsRes.data
+      data: sortedResult
     }
     
   } catch (err) {

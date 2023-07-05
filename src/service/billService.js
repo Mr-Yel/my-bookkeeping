@@ -49,5 +49,45 @@ export const billService = {
       },
       true
     )
+  },
+
+  editBillTypes: async (data) => {
+    return await httpService.request(
+      {
+        name: 'editBillTypes',
+        data
+      },
+      true
+    )
+  },
+
+  removeBillTypes: async (data) => {
+    return await httpService.request(
+      {
+        name: 'removeBillTypes',
+        data
+      },
+      true
+    )
+  },
+
+  editBillTypesSort: async (data) => {
+    return await httpService.request(
+      {
+        name: 'editBillTypesSort',
+        data
+      },
+      true
+    )
+  },
+
+  getBillTypeDetail: async (data) => {
+    return await httpService.request(
+      {
+        name: 'getBillTypeDetail',
+        data
+      },
+      true
+    )
   }
 }

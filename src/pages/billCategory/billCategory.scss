@@ -42,6 +42,7 @@
         &-item {
           display: flex;
           align-items: center;
+          animation:shake .5s;
           justify-content: space-between;
           padding: 12px;
           // width: 100%;
@@ -105,6 +106,9 @@
           &-button{
             color: #666;
             // margin-right: 16rpx;
+          }
+          &-button + &-button {
+            margin-left: 16rpx;
           }
         }
         &-icon{

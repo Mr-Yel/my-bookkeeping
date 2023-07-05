@@ -32,6 +32,26 @@ const billStore = observable({
   async removeBill(params) {
     let res = await billService.removeBill(params)
     return res
+  },
+
+  async editBillTypes(params) {
+    let res = await billService.editBillTypes(params)
+    return res
+  },
+
+  async removeBillTypes(params) {
+    let res = await billService.removeBillTypes(params)
+    return res
+  },
+
+  async editBillTypesSort(params) {
+    let res = await billService.editBillTypesSort(params)
+    return res
+  },
+
+  async getBillTypeDetail(params) {
+    let res = await billService.getBillTypeDetail(params)
+    return res
   }
 })
 export default billStore
