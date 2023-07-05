@@ -53,7 +53,7 @@ export default class billCategory extends Component {
 
   componentDidMount() {
     this.fetchData()
-    Taro.eventCenter.on('billTypesList:refresh', this.refreshData)
+    Taro.eventCenter.on('billTypesList:refresh', () => this.refreshData(2))
     // this.calcScrollHeight()
     // this.initTranslateY()
   }
@@ -74,18 +74,18 @@ export default class billCategory extends Component {
     }
     const res = await BillStore.getBillTypes(params)
     if (res && res.success) {
-      if (res.data && res.data.length == 0) {
-        await Taro.showModal({
-          title: '账单类别为空，请先添加账单类别',
-          showCancel: false,
-          confirmColor: '#000',
-          confirmText: '我知道了',
-          success: () => {
-            routerGoBack()
-          }
-        })
-        return
-      }
+      // if (res.data && res.data.length == 0) {
+      //   await Taro.showModal({
+      //     title: '账单类别为空，请先添加账单类别',
+      //     showCancel: false,
+      //     confirmColor: '#000',
+      //     confirmText: '我知道了',
+      //     success: () => {
+      //       routerGoBack()
+      //     }
+      //   })
+      //   return
+      // }
       list[enumBillType[type]] = res.data
       this.setState({
         activeTab: enumBillType[type],
@@ -194,11 +194,11 @@ export default class billCategory extends Component {
       success: async (res) => {
         if (res.confirm) {
           const params = {
-            list: list && list[activeTab] && list[activeTab].map((e,i)=>({id: e._id, sort:i+1})) || [],
-            type: activeType,
-          } 
+            list: (list && list[activeTab] && list[activeTab].map((e, i) => ({ id: e._id, sort: i + 1 }))) || [],
+            type: activeType
+          }
           const result = await BillStore.editBillTypesSort(params)
-          if(result && result.success) {
+          if (result && result.success) {
             this.setState({
               dragFlag: false
             })
@@ -218,17 +218,17 @@ export default class billCategory extends Component {
     const { activeType } = this.state
     if (refreshType === 1) this.setState({ activeTab: 0 }, () => this.fetchData())
     else {
-      Taro.showModal({
-        title: '提示',
-        content: '确认重置此列表排序吗？',
-        success: (res) => {
-          if (res.confirm) {
-            this.setState(() => this.fetchData(activeType))
-          } else if (res.cancel) {
-            console.log('用户点击取消')
-          }
-        }
-      })
+      // Taro.showModal({
+      //   title: '提示',
+      //   content: '确认重置此列表排序吗？',
+      //   success: (res) => {
+      //     if (res.confirm) {
+      this.fetchData(activeType)
+      // } else if (res.cancel) {
+      //   console.log('用户点击取消')
+      // }
+      // }
+      // })
     }
   }
   /**
@@ -238,7 +238,7 @@ export default class billCategory extends Component {
    */
   changeBillType = (type) => {
     const { activeTab, list, dragFlag } = this.state
-    if(dragFlag) {
+    if (dragFlag) {
       Taro.showToast({
         title: '请先保存排序',
         icon: 'none'
@@ -269,7 +269,7 @@ export default class billCategory extends Component {
    */
   goEditOrSelect = (id) => {
     const { selectEditList, editStatus, dragFlag, activeTab } = this.state
-    if(dragFlag) {
+    if (dragFlag) {
       Taro.showToast({
         title: '请先退出排序状态',
         icon: 'none'
@@ -302,7 +302,7 @@ export default class billCategory extends Component {
    */
   handleSelectItem = () => {
     const { editStatus, selectEditList, dragFlag } = this.state
-    if(dragFlag) {
+    if (dragFlag) {
       Taro.showToast({
         title: '请先退出排序状态',
         icon: 'none'
@@ -315,13 +315,11 @@ export default class billCategory extends Component {
       success: async (res) => {
         if (res.confirm) {
           // 调用删除接口
-          console.log(selectEditList)
-          console.log('删除')
-          const result = await billStore.removeBillTypes({ids: selectEditList})
-          if(result && result.success) {
+          const result = await billStore.removeBillTypes({ ids: selectEditList })
+          if (result && result.success) {
             this.refreshData(2)
             this.setState({
-              editStatus: !editStatus,
+              editStatus: !editStatus
             })
             Taro.showToast({
               title: '删除成功',
@@ -355,10 +353,7 @@ export default class billCategory extends Component {
           }}
         >
           <View className='billCategory-list-item-left'>
-            <View 
-              className='billCategory-list-icon'
-              style={{backgroundColor: item.bill_type_color || '#0f9c5a'}}  
-            >
+            <View className='billCategory-list-icon' style={{ backgroundColor: item.bill_type_color || '#0f9c5a' }}>
               <View style={{ paddingLeft: '24rpx', paddingTop: '12rpx' }}>
                 <MyIcon name={item.bill_type_icon}></MyIcon>
               </View>
@@ -410,24 +405,19 @@ export default class billCategory extends Component {
               <Text className='billCategory-list-left-tips'>长按拖动排序</Text>
             </View>
             <View className='billCategory-list-right'>
-              <Text
-                className='billCategory-list-right-button'
-                onClick={this.editCategory}
-              >
+              <Text className='billCategory-list-right-button' onClick={this.editCategory}>
                 {editStatus ? '取消' : '编辑'}
               </Text>
-              {dragFlag && <Text
-                className='billCategory-list-right-button'
-                onClick={this.saveList}
-              >
-                保存排序
-              </Text>}
-              {dragFlag && <Text
-                className='billCategory-list-right-button'
-                onClick={() => this.refreshData(2)}
-              >
-                重置排序
-              </Text>}
+              {dragFlag && (
+                <Text className='billCategory-list-right-button' onClick={this.saveList}>
+                  保存排序
+                </Text>
+              )}
+              {dragFlag && (
+                <Text className='billCategory-list-right-button' onClick={() => this.refreshData(2)}>
+                  重置排序
+                </Text>
+              )}
             </View>
           </View>
           <scroll-view scroll-y={pageInfo.scrollY} style={{ height: `${pageInfo.scrollHeight}%` }}>
@@ -444,8 +434,9 @@ export default class billCategory extends Component {
               className='billCategory-list-item-move'
               style={{ height: `${pageInfo.rowHeight}px` }}
             >
-              <View className='billCategory-list-icon'
-                style={{backgroundColor: movableViewInfo.bill_type_color || '#0f9c5a'}}  
+              <View
+                className='billCategory-list-icon'
+                style={{ backgroundColor: movableViewInfo.bill_type_color || '#0f9c5a' }}
               >
                 <View style={{ paddingLeft: '24rpx', paddingTop: '12rpx' }}>
                   <MyIcon name={movableViewInfo.bill_type_icon}></MyIcon>

@@ -67,17 +67,17 @@ export default class addBill extends Component {
 
   fetchData = async () => {
     const { iconList } = this.state
-    const { BillStore  } = this.props
-    const res = await BillStore.getBillTypeDetail({_id: this.id}) 
-    if(res && res.success) {
+    const { BillStore } = this.props
+    const res = await BillStore.getBillTypeDetail({ _id: this.id })
+    if (res && res.success) {
       const typeData = res.data
-      
+
       this.setState({
-        selectIndex: iconList.findIndex(e=>e.icon == typeData.bill_type_icon),
+        selectIndex: iconList.findIndex((e) => e.icon == typeData.bill_type_icon),
         category: {
           icon: typeData.bill_type_icon,
           name: typeData.bill_type_name,
-          color: typeData.bill_type_color,
+          color: typeData.bill_type_color
         }
       })
     }
@@ -92,7 +92,7 @@ export default class addBill extends Component {
       title: editType === 0 ? titleType[this.type] : '编辑分类'
     })
   }
-  
+
   /**
    * 选择图标颜色
    * @param {*} index 颜色下标
@@ -124,7 +124,7 @@ export default class addBill extends Component {
   onChange = (e) => {
     const { category } = this.state
     this.setState({
-      category: Object.assign({...category}, {name: e.detail.value})
+      category: Object.assign({ ...category }, { name: e.detail.value })
     })
   }
 
@@ -139,10 +139,10 @@ export default class addBill extends Component {
       bill_type: this.type == 0 ? 'out' : 'in' || 'out',
       bill_type_color: category.color || '',
       bill_type_icon: category.icon || '',
-      bill_type_name: category.name || '',
+      bill_type_name: category.name || ''
     }
     const res = await BillStore.editBillTypes(params)
-    if(res && res.success) {
+    if (res && res.success) {
       await Taro.showToast({
         title: '成功'
       })
@@ -181,7 +181,13 @@ export default class addBill extends Component {
                     <MyIcon name={category.icon}></MyIcon>
                   </View>
                 </View>
-                <Input value={category.name} onInput={(e) => this.onChange(e)} type='text' maxLength='10' className='name-edit-name' />
+                <Input
+                  value={category.name}
+                  onInput={(e) => this.onChange(e)}
+                  type='text'
+                  maxlength='10'
+                  className='name-edit-name'
+                />
               </View>
               <View className='name-edit-color'>{colorListView}</View>
             </View>
