@@ -6,6 +6,7 @@ const accountStore = observable({
   accounts: [], // 账户
   accountBookList: [],
   curAccountBook: {},
+  budget: {},
 
   async getAccountList(params) {
     let res = await accountService.getAccountList(params)
@@ -29,5 +30,10 @@ const accountStore = observable({
       console.log(err)
     }
   },
+
+  async getBudgetDetail(params) {
+    let res = await accountService.getBudgetDetail(params)
+    return res
+  }
 });
 export default accountStore;

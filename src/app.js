@@ -1,5 +1,6 @@
 import Taro from "@tarojs/taro";
 import { Component } from 'react'
+import dayjs from 'dayjs'
 import { Provider } from "mobx-react";
 import BillStore from "./stores/BillStore";
 import UserStore from "./stores/UserStore";
@@ -16,6 +17,7 @@ const stores = {
 class App extends Component {
 
   async componentWillMount() {
+    console.log(11111111111);
     this.init(()=>{
       Taro.eventCenter.trigger('init:success')
     })
@@ -30,7 +32,8 @@ class App extends Component {
   async init (callback) {
     await UserStore.getUserInfo()
     await AccountStore.getAccountBookList()  // 获取用户账本列表
-    Promise.all[AccountStore.getAccountList()]    // 获取用户账单 // 获取用户账户列表
+    Promise.all[AccountStore.getAccountList()]  
+      // 获取用户账单 // 获取用户账户列表
     UserStore.getSysInfo()
     callback()
   }

@@ -57,6 +57,8 @@
   openid 必填 String 关联用户,
   bill_type_id 非必填 String 关联账单类型 预留字段，用于之后方便新增分类预算功能,
   property 必填 String 每月预算，
+  start_date 必填 Date
+  end_date 必填 Date
 }
 ```
 ### 账单类型中间表 users_or_account_book_bill_types

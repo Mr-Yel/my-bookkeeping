@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react'
 import { routerGoIn } from '@/utils/router'
 import { MyPage, MyIcon } from '@/components'
 import { AmountType } from '@/enum'
+import { DEFAULT_ACCOUNT_BOOK_BG } from '@/config'
 
 @inject('AccountStore')
 @observer
@@ -89,7 +90,7 @@ export default class Home extends Component {
             onClick={() => this.handelClick(item)}
             className='account-item'
           >
-            <Image src={item.account_img}></Image>
+            <Image src={item.account_img || DEFAULT_ACCOUNT_BOOK_BG}></Image>
             {item.name}
           </View>)}
           <View

@@ -25,14 +25,16 @@ exports.main = async (event, context) => {
     }
     
     const usersOrAccountBookBillTypesRes = await usersOrAccountBookBillTypesCollection.where({
-      bill_type_id: _.in(ids)
+      bill_type_id: _.in(ids),
+      openid: openid,
     }).get()
 
     if(usersOrAccountBookBillTypesRes && usersOrAccountBookBillTypesRes.data) {
       const canRemoveBillTypes = usersOrAccountBookBillTypesRes.data.filter(e=>!e.is_base_bill_type)
     
       await usersOrAccountBookBillTypesCollection.where({
-        bill_type_id: _.in(ids)
+        bill_type_id: _.in(ids),
+        openid: openid,
       }).remove()
     
       await billTypesCollection.where({

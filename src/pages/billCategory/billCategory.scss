@@ -32,94 +32,101 @@
       box-shadow: 0 0 20px rgba($color: #000000, $alpha: 0.1);
       display: flex;
       flex-direction: column;
-        &-header {
-          padding: 12px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 2rpx solid #e8e8e8;
-        }
-        &-item {
-          display: flex;
-          align-items: center;
-          animation:shake .5s;
-          justify-content: space-between;
-          padding: 12px;
-          // width: 100%;
-          height: 128px;
-          border-bottom: 1px #ddd solid;
-          &-left{
-            display: flex;
-            align-items: center;
-          }
-          &-right{
-            width: 50rpx;
-            height: 50rpx;
-            border-radius: 50%;
-            color: white;
-            border:5px solid #D9D9D9;
-            font-size: 36rpx;
-            transition: all 1s;
-            &-active{
-              background-color: #0f9c5a;
-              border: none;
-            }
-          }
-          &-right::before {
-            content: '✔';
-            position: relative;
-            left: 10rpx;
-          }
-        }
-        &-item-move{
-          display: flex;
-          align-items: center;
-          padding: 12px;
-          width: 100%;
-          height: 128px;
-          // border: 1px #ddd solid;
-          background-color: #ffffff;
-          box-shadow: #D9D9D9 0px 0px 20px;
-        }
-        &-movableArea{
-          position: absolute;
-          top: 0;
-          left: 0;
-          z-index: 10;
-          width: 100%;
-        }
+      &-name {
+        @include  mul-text-truncate(2);
+        word-break: break-all;
+        flex: 1;
+      }
+      &-header {
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2rpx solid #e8e8e8;
+      }
+      &-item {
+        display: flex;
+        align-items: center;
+        animation:shake .5s;
+        justify-content: space-between;
+        padding: 12px;
+        // width: 100%;
+        height: 128px;
+        border-bottom: 1px #ddd solid;
         &-left{
           display: flex;
-          flex-direction: column;
-          &-title{
-            font-size:36rpx;
-            line-height: 36rpx;
-          }
-          &-tips{
-            font-size:24rpx;
-            line-height: 24rpx;
-            margin-top: 10px;
-            color: #888;
-          }
+          align-items: center;
+          flex: 1;
+          padding-right: 10rpx;
         }
         &-right{
-          &-button{
-            color: #666;
-            // margin-right: 16rpx;
-          }
-          &-button + &-button {
-            margin-left: 16rpx;
-          }
-        }
-        &-icon{
-          width: 100rpx;
-          height: 100rpx;
-          font-size: 48rpx;
-          color: #ffffff;
-          background-color: #0f9c5a;
+          width: 50rpx;
+          height: 50rpx;
           border-radius: 50%;
-          margin-right: 40px;
+          color: white;
+          border:5px solid #D9D9D9;
+          font-size: 36rpx;
+          transition: all 1s;
+          &-active{
+            background-color: #0f9c5a;
+            border: none;
+          }
         }
+        &-right::before {
+          content: '✔';
+          position: relative;
+          left: 10rpx;
+        }
+      }
+      &-item-move{
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        width: 100%;
+        height: 128px;
+        // border: 1px #ddd solid;
+        background-color: #ffffff;
+        box-shadow: #D9D9D9 0px 0px 20px;
+      }
+      &-movableArea{
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        width: 100%;
+      }
+      &-left{
+        display: flex;
+        flex-direction: column;
+        &-title{
+          font-size:36rpx;
+          line-height: 36rpx;
+        }
+        &-tips{
+          font-size:24rpx;
+          line-height: 24rpx;
+          margin-top: 10px;
+          color: #888;
+        }
+      }
+      &-right{
+        &-button{
+          color: #666;
+          // margin-right: 16rpx;
+        }
+        &-button + &-button {
+          margin-left: 16rpx;
+        }
+      }
+      &-icon{
+        width: 100rpx;
+        height: 100rpx;
+        font-size: 48rpx;
+        color: #ffffff;
+        background-color: #0f9c5a;
+        border-radius: 50%;
+        margin-right: 40px;
+      }
     }
     &-add{
       width: 100rpx;

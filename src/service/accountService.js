@@ -21,4 +21,11 @@ export const accountService = {
       data
     }, true)
   },
+  // 获取预算详情
+  getBudgetDetail: async (data) => {
+    return await httpService.request({
+      name: 'getBudgetDetail',
+      data
+    }, true)
+  },
 }

@@ -7,7 +7,7 @@ import { MyPage, BillsDateCard, MyIcon } from '@/components'
 import { routerGoIn } from '@/utils/router'
 import { AmountType } from '@/enum'
 
-@inject('BillStore', 'UserStore')
+@inject('BillStore', 'UserStore', 'AccountStore')
 @observer
 export default class Home extends Component {
   constructor(props) {
@@ -21,6 +21,7 @@ export default class Home extends Component {
       activeTab: 0,
       outTotal: 0,
       inTotal: 0,
+      budget: {}
     }
   }
 
@@ -29,6 +30,7 @@ export default class Home extends Component {
   async componentDidMount () {
     Taro.eventCenter.on('init:success', ()=>{
       this.fetchData()
+      this.getBudgetDetail()
     })
     Taro.eventCenter.on('addBill:success', this.refreshData)
     Taro.eventCenter.on('removeBill:success', this.refreshData)
@@ -50,7 +52,7 @@ export default class Home extends Component {
     const params = {
       start_time: dayjs(selectTime).startOf('month').format('YYYYMMDD'),
       end_time: dayjs(selectTime).endOf('month').format('YYYYMMDD'),
-      bill_type: AmountType[activeTab]
+      bill_type: AmountType[activeTab],
     }
     const res = await BillStore.getBillsList(params)
     if (res && res.success) {
@@ -59,6 +61,20 @@ export default class Home extends Component {
         billDetails,
         outTotal: (res.data && res.data.out_total) || 0,
         inTotal: (res.data && res.data.in_total) || 0
+      })
+    }
+  }
+
+  getBudgetDetail =  async () => {
+    const { AccountStore } = this.props
+    const { selectTime} = this.state
+    const params = {
+      time: dayjs(selectTime).format('YYYY-MM-DD HH:mm:ss'),
+    }
+    const res = await AccountStore.getBudgetDetail(params)
+    if (res && res.success && res.data) {
+      this.setState({
+        budget: res.data || {}
       })
     }
   }
@@ -120,7 +136,7 @@ export default class Home extends Component {
   }
 
   render () {
-    const { billDetails, activeTab, outTotal, inTotal, selectTime } = this.state
+    const { billDetails, activeTab, outTotal, inTotal, selectTime, budget: { property } } = this.state
     const billList = this.billDetailFormatChange(billDetails[activeTab])
     const header = (
       <View>
@@ -130,17 +146,13 @@ export default class Home extends Component {
         </Picker>
       </View>
     )
-    console.log('billList', billList)
-    console.log(dayjs(selectTime).startOf('month').toDate())
-    console.log(dayjs(selectTime).endOf('month').toDate())
-
     return (
       <MyPage className='Home' titleContent={header} showBg>
         <View className='bills-title-bg'></View>
         <View className='bills-title'>
           <View className='bills-title-balance'>
             <View>月结余(元)</View>
-            <View className='balance-num'>{12}</View>
+            <View className='balance-num'>{property ? property-outTotal : 0}</View>
           </View>
           <View className='bills-sum'>
             <View className='bills-outcome'>
