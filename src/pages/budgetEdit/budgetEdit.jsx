@@ -83,7 +83,7 @@ export default class budgetEdit extends Component {
     switch (type) {
       case 'property':
         const val = e && e.detail && e.detail.value
-        this.setState({ budget: {...budget, property: val} })
+        this.setState({ budget: { ...budget, property: val } })
         break;
     }
   }
@@ -97,15 +97,22 @@ export default class budgetEdit extends Component {
           titleContent={`${dayjs().format('YYYY年MM月')}预算管理`}
         >
           <View className='content'>
-            <View>
-              <Text>本月预算： {property || 0}</Text>
-              <MyIcon onClick={()=>this.setState({openBudgetEdit: true})} name='icon-edit-1'></MyIcon>
-            </View>
-            <View>
-              本月支出: {outTotal || 0}
-            </View>
-            <View>
-              预算剩余： {property - outTotal || 0}
+            <View className='header_card'>
+              <View className='echarts'></View>
+              <View className='show'>
+                <View>
+                  <Text>本月预算</Text>
+                  <Text onClick={() => this.setState({ openBudgetEdit: true })}>￥{property || 0}<MyIcon name='icon-edit-1'></MyIcon></Text>
+                </View>
+                <View>
+                  <Text>本月支出</Text>
+                  <Text>￥{outTotal || 0}</Text>
+                </View>
+                <View>
+                  <Text>预算剩余</Text>
+                  <Text>￥{property - outTotal || 0}</Text>
+                </View>
+              </View>
             </View>
           </View>
           <MyModal
@@ -119,7 +126,7 @@ export default class budgetEdit extends Component {
               placeholder='请输入预算'
               maxLength='10'
               onInput={e => { this.onChange(e, 'property') }}
-            />} 
+            />}
             onClose={() => this.setState({ openBudgetEdit: false })}
             onCancel={() => this.setState({ openBudgetEdit: false })}
             onConfirm={(e) => this.setUserInfo(e, 'name')}
