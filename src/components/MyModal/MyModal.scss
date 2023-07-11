@@ -1,0 +1,62 @@
+.MyModal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 200ms ease-in;
+  z-index: 1000;
+  &.active {
+    visibility: visible;
+    opacity: 1;
+  }
+  .MyModal_bg {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0,0,0,.3);
+    transition: opacity 200ms ease-in;
+  }
+  .MyModal_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 500rpx;
+    border-radius: 40rpx;
+    background-color: #fff;
+    overflow: hidden;
+  }
+  .MyModal_header {
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 20rpx 30rpx;
+    color: #333;
+    font-size: 36rpx;
+    text-align: center;
+    .MyIcon {
+      position: absolute;
+      top: 50%;
+      right: 30rpx;
+      transform: translate(0, -50%);
+    }
+  }
+  .MyModal_content {
+    padding: 0 32rpx 32rpx;
+  }
+  .MyModal_action {
+    display: flex;
+    Text {
+      flex: 1;
+      text-align: center;
+      padding: 24rpx;
+      border: 1rpx solid rgba($color: #000000, $alpha: 0.1);
+    }
+  }
+}

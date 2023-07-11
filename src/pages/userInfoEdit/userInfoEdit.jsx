@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { View, Text, Image, Button, Input, NavigationBarTitle } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { DEFAULT_HEADER } from '../../config'
-import { MyPage } from '../../components'
+import { MyPage, MyModal } from '../../components'
 import { routerGoIn } from '../../utils/router'
 
 
@@ -58,9 +58,8 @@ export default class userInfoEdit extends Component {
         break;
       case 'name':
         const { copyName } = this.state
-        this.setState({ name: copyName })
         await UserStore.setUserInfo({ name: copyName })
-        this.setState({ openNameEdit: false })
+        this.setState({ name: copyName, openNameEdit: false })
         break;
     }
   }
@@ -100,7 +99,24 @@ export default class userInfoEdit extends Component {
               </View>
             </View>
           </View>
-          {openNameEdit && <View className='mark-edit-name'>
+          <MyModal
+            open={openNameEdit}
+            title='更换昵称'
+            content={<Input
+              focus
+              value={copyName}
+              className='mark-edit-name-input'
+              type='text'
+              placeholder='请输入昵称'
+              maxLength='10'
+              onInput={e => { this.onChange(e, 'copyName') }}
+            />} 
+            onClose={() => this.setState({ openNameEdit: false })}
+            onCancel={() => this.setState({ openNameEdit: false })}
+            onConfirm={(e) => this.setUserInfo(e, 'name')}
+            showFooter
+          ></MyModal>
+          {/* {openNameEdit && <View className='mark-edit-name'>
             <View className='mark' onClick={() => this.setState({ openNameEdit: false })}></View>
             <View className='mark-edit-name-content'>
               <View className='mark-edit-name-title'>更换昵称</View>
@@ -118,7 +134,7 @@ export default class userInfoEdit extends Component {
                 <Text className='mark-edit-name-sure' onClick={(e) => this.setUserInfo(e, 'name')}>确定</Text>
               </View>
             </View>
-          </View>}
+          </View>} */}
         </MyPage>
       </View>
     )

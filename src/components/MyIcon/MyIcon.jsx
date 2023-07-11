@@ -12,11 +12,16 @@ export default class MyIcon extends Component {
     return name
   }
 
+  click = () => {
+    const { onClick } = this.props
+    onClick && onClick()
+  }
+
   render () {
     const { prefix='icon-', name } = this.props
     const iconName = this.nameTransform(name)
     return (
-      <Text className={`MyIcon iconfont ${prefix}${iconName} ${iconName}`}></Text>
+      <Text onClick={this.click} className={`MyIcon iconfont ${prefix}${iconName} ${iconName}`}></Text>
     )
   }
 }

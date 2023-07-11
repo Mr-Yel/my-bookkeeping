@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
 import Taro from "@tarojs/taro";
 import { Component } from 'react'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Input } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
-import { MyPage, MyIcon } from '@/components'
+import { MyPage, MyIcon, MyModal } from '@/components'
 
 
 @inject('BillStore', 'AccountStore', 'UserStore')
@@ -21,7 +21,8 @@ export default class budgetEdit extends Component {
       outTotal: 0,
       budget: {
         property: 0
-      }
+      },
+      openBudgetEdit: false
     }
   }
 
@@ -77,10 +78,18 @@ export default class budgetEdit extends Component {
     this.setState({}, () => this.fetchData(true))
   }
 
-
+  onChange = (e, type) => {
+    const { budget } = this.state
+    switch (type) {
+      case 'property':
+        const val = e && e.detail && e.detail.value
+        this.setState({ budget: {...budget, property: val} })
+        break;
+    }
+  }
 
   render () {
-    const { outTotal, budget: { property } } = this.state
+    const { outTotal, budget: { property }, openBudgetEdit } = this.state
     return (
       <View className='budgetEdit'>
         <MyPage
@@ -90,7 +99,7 @@ export default class budgetEdit extends Component {
           <View className='content'>
             <View>
               <Text>本月预算： {property || 0}</Text>
-              <MyIcon onClick={()=>{}} name='icon-edit-1'></MyIcon>
+              <MyIcon onClick={()=>this.setState({openBudgetEdit: true})} name='icon-edit-1'></MyIcon>
             </View>
             <View>
               本月支出: {outTotal || 0}
@@ -99,6 +108,23 @@ export default class budgetEdit extends Component {
               预算剩余： {property - outTotal || 0}
             </View>
           </View>
+          <MyModal
+            open={openBudgetEdit}
+            title='设置预算'
+            content={<Input
+              focus
+              value={property}
+              className='mark-edit-name-input'
+              type='number'
+              placeholder='请输入预算'
+              maxLength='10'
+              onInput={e => { this.onChange(e, 'property') }}
+            />} 
+            onClose={() => this.setState({ openBudgetEdit: false })}
+            onCancel={() => this.setState({ openBudgetEdit: false })}
+            onConfirm={(e) => this.setUserInfo(e, 'name')}
+            showFooter
+          ></MyModal>
         </MyPage>
       </View>
     )
