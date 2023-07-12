@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { View, ScrollView } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { routerGoBack } from '../../utils/router'
 import { MyIcon } from '../index'
@@ -10,11 +10,7 @@ export default class MyPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      dragStyle: {
-        //下拉框的样式
-        top: '30px',
-        transition: `all 1s`
-      }
+      
     }
   }
 
@@ -33,7 +29,6 @@ export default class MyPage extends Component {
   }
 
   render() {
-    const { dragStyle } = this.state
     const {
       canGoBack,
       leftContent,

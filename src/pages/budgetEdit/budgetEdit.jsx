@@ -4,7 +4,7 @@ import { Component } from 'react'
 import { View, Text, Input } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { MyPage, MyIcon, MyModal } from '@/components'
-
+import WaterPoloPieChart  from '@/components/Charts/WaterPoloPieChart'
 
 @inject('BillStore', 'AccountStore', 'UserStore')
 @observer
@@ -34,6 +34,17 @@ export default class budgetEdit extends Component {
   componentDidMount () {
     this.fetchData()
     this.getBudgetDetail()
+     // 延迟调用，确保 ec-canvas 节点已存在
+     setTimeout(() => {
+      const chartData = [
+        {value:335, name:'直接访问'},
+        {value:310, name:'邮件营销'},
+        {value:234, name:'联盟广告'},
+        {value:135, name:'视频广告'},
+        {value:1548, name:'搜索引擎'}
+      ];
+      this.WaterPoloPieChart.refresh(chartData);
+    }, 100)
   }
 
   componentWillUnmount () { }
@@ -98,7 +109,9 @@ export default class budgetEdit extends Component {
         >
           <View className='content'>
             <View className='header_card'>
-              <View className='echarts'></View>
+              <View className='pie-chart'>
+                <WaterPoloPieChart ref={e=>this.WaterPoloPieChart=e} />
+              </View>
               <View className='show'>
                 <View>
                   <Text>本月预算</Text>
