@@ -22,6 +22,7 @@ export default class budgetEdit extends Component {
       budget: {
         property: 0
       },
+      cloneProperty: 0,
       openBudgetEdit: false
     }
   }
@@ -32,19 +33,17 @@ export default class budgetEdit extends Component {
   }
 
   componentDidMount () {
-    this.fetchData()
-    this.getBudgetDetail()
-     // 延迟调用，确保 ec-canvas 节点已存在
-     setTimeout(() => {
-      const chartData = [
-        {value:335, name:'直接访问'},
-        {value:310, name:'邮件营销'},
-        {value:234, name:'联盟广告'},
-        {value:135, name:'视频广告'},
-        {value:1548, name:'搜索引擎'}
-      ];
-      this.WaterPoloPieChart.refresh(chartData);
-    }, 100)
+    Promise.all([this.fetchData(),  this.getBudgetDetail()]).then(res=>{
+      let outTotal = 0
+      let property = 0
+      if(res && res[0]) {
+        outTotal = res[0]?.data?.out_total || 0
+      }
+      if(res && res[1]) {
+        property = res[1]?.data?.property || 0
+      }
+      this.WaterPoloPieChart.refresh(property, outTotal);
+    })
   }
 
   componentWillUnmount () { }
@@ -68,6 +67,7 @@ export default class budgetEdit extends Component {
         billDetails,
         outTotal: (res.data && res.data.out_total) || 0
       })
+      return res
     }
   }
 
@@ -82,6 +82,7 @@ export default class budgetEdit extends Component {
       this.setState({
         budget: res.data || {}
       })
+      return res
     }
   }
 
@@ -91,16 +92,38 @@ export default class budgetEdit extends Component {
 
   onChange = (e, type) => {
     const { budget } = this.state
+    const val = e && e.detail && e.detail.value
     switch (type) {
       case 'property':
-        const val = e && e.detail && e.detail.value
-        this.setState({ budget: { ...budget, property: val } })
+        this.setState({ budget: { ...budget, property: e } })
         break;
+      default: 
+        this.setState({ [type]: val })
+    }
+  }
+
+  setBudgetProperty = async () => {
+    const { AccountStore } = this.props
+    const { budget, cloneProperty, outTotal } = this.state
+    const params = {
+      property: cloneProperty,
+      budget_id: budget._id,
+    }
+    const res = await AccountStore.setBudgetProperty(params)
+    if (res && res.success && res.data) {
+      this.onChange(cloneProperty, 'property')
+      this.setState({openBudgetEdit: false})
+      this.WaterPoloPieChart.refresh(cloneProperty, outTotal);
+      Taro.eventCenter.trigger('propertyChange:success')
+      Taro.showToast({
+        title: '修改成功',
+        icon: 'success',
+      })
     }
   }
 
   render () {
-    const { outTotal, budget: { property }, openBudgetEdit } = this.state
+    const { outTotal, budget: { property }, openBudgetEdit, cloneProperty } = this.state
     return (
       <View className='budgetEdit'>
         <MyPage
@@ -115,7 +138,7 @@ export default class budgetEdit extends Component {
               <View className='show'>
                 <View>
                   <Text>本月预算</Text>
-                  <Text onClick={() => this.setState({ openBudgetEdit: true })}>￥{property || 0}<MyIcon name='icon-edit-1'></MyIcon></Text>
+                  <Text onClick={() => this.setState({ openBudgetEdit: true, cloneProperty: property })}>￥{property || 0}<MyIcon name='icon-edit-1'></MyIcon></Text>
                 </View>
                 <View>
                   <Text>本月支出</Text>
@@ -133,16 +156,16 @@ export default class budgetEdit extends Component {
             title='设置预算'
             content={<Input
               focus
-              value={property}
+              value={cloneProperty}
               className='mark-edit-name-input'
               type='number'
               placeholder='请输入预算'
               maxLength='10'
-              onInput={e => { this.onChange(e, 'property') }}
+              onInput={e => { this.onChange(e, 'cloneProperty') }}
             />}
             onClose={() => this.setState({ openBudgetEdit: false })}
             onCancel={() => this.setState({ openBudgetEdit: false })}
-            onConfirm={(e) => this.setUserInfo(e, 'name')}
+            onConfirm={(e) => this.setBudgetProperty()}
             showFooter
           ></MyModal>
         </MyPage>

@@ -28,4 +28,11 @@ export const accountService = {
       data
     }, true)
   },
+  // 修改预算
+  setBudgetProperty: async (data) => {
+    return await httpService.request({
+      name: 'setBudgetProperty',
+      data
+    }, true)
+  },
 }

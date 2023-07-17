@@ -34,11 +34,13 @@ export default class Home extends Component {
     })
     Taro.eventCenter.on('addBill:success', this.refreshData)
     Taro.eventCenter.on('removeBill:success', this.refreshData)
+    Taro.eventCenter.on('propertyChange:success', this.refreshBudgetDetail)
   }
 
   componentWillUnmount () {
     Taro.eventCenter.off('addBill:success', this.refreshData)
-    Taro.eventCenter.on('removeBill:success', this.refreshData)
+    Taro.eventCenter.off('removeBill:success', this.refreshData)
+    Taro.eventCenter.off('propertyChange:success', this.refreshBudgetDetail)
   }
 
   componentDidShow () { }
@@ -81,6 +83,10 @@ export default class Home extends Component {
 
   refreshData = () => {
     this.setState({ activeTab: 0, billDetails: [] }, () => this.fetchData())
+  }
+
+  refreshBudgetDetail = () => {
+    this.setState({}, () => this.getBudgetDetail())
   }
 
   goToAddBill = () => {

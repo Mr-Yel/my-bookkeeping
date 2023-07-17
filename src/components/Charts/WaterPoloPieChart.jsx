@@ -1,53 +1,90 @@
 import { Component } from "react";
 import { getCurrentInstance } from "@tarojs/taro" //Taro3.x需要使用getCurrentInstance 获取页面DOM
 import * as echarts from "./ec-canvas/echarts";
+import { unifyNumber } from "../../utils"
 
-function setChartData(chart, data) {
+function setChartData (chart, all = 0, use = 0) {
+
+  let proportion = all ? unifyNumber(use/all*100) + '%' : '0%'
+
   let option = {
     //标题
     title: {
-      text: 1 + "%", //主标题文本
+      top: "45%",
       left: "center",
-      top: "center",
+      text: proportion,
       textStyle: {
-        fontSize: 18,
-        color: '#333',
-        align: "center",
-      },
-    },
-    series : [
-      {
-        name: '预算',
-        type: 'pie',
-        avoidLabelOverlap: false,
-        labelLine: {
-          show: false
-        },
-        center: ['50%', '50%'],
-        radius: ["60%", "80%"],
-        itemStyle: {
-          borderRadius: 40,
-          // borderWidth: 2,
-        },
-        data:[
-          {
-            value: 12,
-            itemStyle: {
-              normal: {
-                color: '#333',
-              },
-            },
-          },
-          {
-            value: 100 - 12,
-            itemStyle: {
-              normal: {
-                color: 'red',
-              },
-            },
-          },
-        ],
+        color: "#000",
+        fontStyle: "normal",
+        fontWeight: "normal",
+        fontSize: 24,
       }
+    },
+    series: [
+      {
+        type: "pie",
+        radius: ["40%", "60%"],
+        hoverAnimation: false, ////设置饼图默认的展开样式
+        labelLine: {
+          normal: {
+            show: false,
+          },
+        },
+        itemStyle: {
+          // 此配置
+          normal: {
+            borderWidth: 2,
+            borderColor: "#fff",
+          },
+          emphasis: {
+            borderWidth: 0,
+            shadowBlur: 2,
+            shadowOffsetX: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+        },
+        data: [{
+          name: '',
+          value: use,
+          labelLine: {
+            show: false,
+          },
+          itemStyle: {
+            color: '#5886f0',
+          },
+          emphasis: {
+            labelLine: {
+              show: false,
+            },
+            itemStyle: {
+              color: '#5886f0',
+            },
+          },
+        },
+        {
+          //画剩余的刻度圆环
+          name: '',
+          value: all-use,
+          itemStyle: {
+            color: 'rgba(255,255,255,0)',
+          },
+          labelLine: {
+            show: false,
+          },
+          label: {
+            show: false,
+          },
+          emphasis: {
+            labelLine: {
+              show: false,
+            },
+            itemStyle: {
+              color: 'rgba(255,255,255,0)',
+            },
+          },
+        },
+        ]
+      },
     ]
   };
   chart.setOption(option);
@@ -65,18 +102,18 @@ export default class WaterPoloPieChart extends Component {
   componentDidMount () {
   }
 
-  refresh (data) {
+  refresh (property, outTotal) {
     console.log(getCurrentInstance());
     getCurrentInstance().page.selectComponent('#mychart-area').init((canvas, width, height) => {
       const chart = echarts.init(canvas, null, {
         width: width,
         height: height
       });
-      setChartData(chart, data);
+      setChartData(chart, property, outTotal);
       return chart;
     });
   }
-  
+
   refChart = node => (this.Chart = node);
 
   render () {

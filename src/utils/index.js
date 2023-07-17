@@ -247,3 +247,28 @@ export const uploadAvatar = (img) => {
     })
   })
 }
+
+/**
+ * 数字保留两位小数并且去零
+ * example：
+ *  '' -> 0
+ *  0.00 -> 0
+ *  1 -> 1
+ *  1.10 -> 1
+ *  1.213000 -> 1.21
+ *  1.01 -> 1.01
+ * @param num String
+ */
+export function unifyNumber(num) {
+  if (num === '') {
+    return 0
+  } else {
+    let handleNum = parseFloat(num)
+    let isToFixed = handleNum.toString().includes('.') && handleNum.toString().split('.')[1].length > 2
+    if (isToFixed) {
+      return handleNum.toFixed(2)
+    } else {
+      return handleNum
+    }
+  }
+}

@@ -17,7 +17,6 @@ const stores = {
 class App extends Component {
 
   async componentWillMount() {
-    console.log(11111111111);
     this.init(()=>{
       Taro.eventCenter.trigger('init:success')
     })

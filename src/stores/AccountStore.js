@@ -34,6 +34,13 @@ const accountStore = observable({
   async getBudgetDetail(params) {
     let res = await accountService.getBudgetDetail(params)
     return res
-  }
+  },
+
+  async setBudgetProperty(params) {
+    let res = await accountService.setBudgetProperty(params)
+    return res
+  },
+
+  
 });
 export default accountStore;
