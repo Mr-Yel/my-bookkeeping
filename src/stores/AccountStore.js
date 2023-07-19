@@ -3,8 +3,9 @@ import { observable } from "mobx";
 import { accountService } from "../service/accountService";
 
 const accountStore = observable({
-  accounts: [], // 账户
-  accountBookList: [],
+  accounts: [], // 账户 // 微信，支付宝。。。
+  curAccount: {}, 
+  accountBookList: [], // 测试账本
   curAccountBook: {},
   budget: {},
 
@@ -15,10 +16,17 @@ const accountStore = observable({
     }
     return res
   },
+
+  async getAccountDetail(params) {
+    let res = await accountService.getAccountDetail(params)
+    return res
+  },
+
   async editAccount(params) {
     let res = await accountService.editAccount(params)
     return res
   },
+
   async getAccountBookList() {
     try {
       let res = await accountService.getAccountBookList()

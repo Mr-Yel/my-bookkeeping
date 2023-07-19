@@ -53,9 +53,18 @@
       align-items: center;
       border-bottom: 1px solid $color-line;
       Image {
+        flex-shrink: 0;
         padding-right: 12px;
         width: 60px;
         height: 60px;
+      }
+      .account-name {
+        flex: 1;
+        @include mul-text-truncate(1)
+      }
+      .account-property {
+        padding-left: 10rpx;
+        flex-shrink: 0;
       }
     }
   }

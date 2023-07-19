@@ -18,11 +18,11 @@ export default class CustomSoftKeyboard extends Component {
       curOperator: '',                      // 当前操作符
       amount: 0,                            // 金额
       notes: '',                            // 备注
-      accountBook: {},                      // 当前账本
+      curAccount: {},                       // 当前账户
       date: dayjs().format('YYYY/MM/DD'),   // 日期
       time: dayjs().format('HH:mm'),        // 时间
 
-      isAccountBookOpened: false,
+      isAccountOpened: false,
     }
   }
 
@@ -39,11 +39,11 @@ export default class CustomSoftKeyboard extends Component {
   componentDidHide() {}
   
   get selectButtons() {
-    const { accountBook, date, time } = this.state
+    const { curAccount, date, time } = this.state
     return [
       {
-        name: accountBook && accountBook.name || '请选择账本',
-        onClick: () => this.setState({isAccountBookOpened: true})
+        name: curAccount && curAccount.name || '请选择账本',
+        onClick: () => this.setState({isAccountOpened: true})
       },
       {
         name: <Picker value={time} mode='time' onChange={(e)=>this.onChange('time', e)}>
@@ -69,13 +69,13 @@ export default class CustomSoftKeyboard extends Component {
   }
 
   isComplete = () => {
-    const { amount, notes, accountBook, date, time } = this.state
+    const { amount, notes, curAccount, date, time } = this.state
     const { isComplete } = this.props
     isComplete &&
       isComplete({
         amount,
         notes,
-        accountBook,
+        curAccount,
         date,
         time
       })
@@ -139,6 +139,7 @@ export default class CustomSoftKeyboard extends Component {
   updateValue = (data) => {
     console.log('data',data);
     this.setState({ 
+      curAccount: data.account,
       notes: data.notes, 
       amount: data.amount,
       date: data.date_time ? dayjs(data.date_time).format('YYYY/MM/DD') : dayjs().format('YYYY/MM/DD'),
@@ -147,7 +148,7 @@ export default class CustomSoftKeyboard extends Component {
   }
 
   render() {
-    const { amount, operationString, notes, isAccountBookOpened } = this.state
+    const { amount, operationString, notes, isAccountOpened } = this.state
     const { keyboardBtnCrt } = this
 
     return (
@@ -201,9 +202,9 @@ export default class CustomSoftKeyboard extends Component {
 
 
         <AccountPopUpList 
-          isOpened={isAccountBookOpened}
-          onChange={(e)=>this.onChange('accountBook', e)}
-          onClose={()=>this.setState({isAccountBookOpened: false})}
+          isOpened={isAccountOpened}
+          onChange={(e)=>this.onChange('curAccount', e)}
+          onClose={()=>this.setState({isAccountOpened: false})}
         >
         </AccountPopUpList>
       </View>

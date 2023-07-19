@@ -53,6 +53,26 @@ exports.main = async (event, context) => {
         bill_type_info: 0,
         bill_type_id: 0
       })
+      .lookup({
+        from: 'account',
+        localField: 'account_id',
+        foreignField: '_id',
+        as: 'account_info'
+      })
+      .addFields({
+        'account': {
+          '_id': {
+            $arrayElemAt: ['$account_info._id', 0]
+          },
+          'name': {
+            $arrayElemAt: ['$account_info.name', 0]
+          }
+        }
+      })
+      .project({
+        account_info: 0,
+        account_id: 0
+      })
       .end();
 
     return {

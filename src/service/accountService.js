@@ -14,6 +14,13 @@ export const accountService = {
       data
     }, false)
   },
+  // 获取账本详情
+  getAccountDetail: async (data) => {
+    return await httpService.request({
+      name: 'getAccountDetail',
+      data
+    }, false)
+  },
   // 修改新增账本
   editAccount: async (data) => {
     return await httpService.request({

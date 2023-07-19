@@ -12,18 +12,33 @@ exports.main = async (event, context) => {
   console.log(event);
   try {
     const accountsCollection = db.collection('account')
-    const newAccount = {
-      account_book_id: event.account_book_id || '',
-      account_img: event.account_img || '',
-      name: event.name || '',
-      property: event.property == undefined ? '' : event.property,
-    }
-    const res = await accountsCollection.add({
-      data: {
-        ...newAccount
+    let accountData = {}
+    if(event.account_id) {
+      let accountRes = await accountsCollection.doc(event.account_id).get()
+      if(accountRes && accountRes.data) {
+        accountData = accountRes.data
       }
-    })
-    const { _id } = res
+    }
+    const newAccount = {
+      account_book_id: event.account_book_id || accountData.account_book_id || '',
+      account_img: event.account_img || accountData.account_img || '',
+      name: event.name || accountData.name || '',
+      property: +event.property || +accountData.property || 0,
+    }
+    const res = event.account_id ? 
+      // 修改
+      await accountsCollection.doc(event.account_id).update({
+        data: {
+          ...newAccount
+        }
+      }) : 
+      // 新增
+      await accountsCollection.add({
+        data: {
+          ...newAccount
+        }
+      })
+    const _id = event.account_id || res._id
     return {
       success: true,
       data: _id

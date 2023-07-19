@@ -6,18 +6,21 @@ cloud.init({ env: 'yel-bookkeeping-6gjr4iqo76b6d62b' }) // 使用当前云环境
 
 const db = cloud.database()
 
+const collection = db.collection('bills')
+
+const accountCollection = db.collection('account')
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID
   console.log(event);
   try {
-    const collection = db.collection('bills')
-    const billData = {}
+    let billData = {}
     if(event._id) {
-      let billListRes = collection.doc(event._id).get()
-      if(billListRes && billListRes.list && billListRes.list[0]) {
-        billData = billListRes.list[0]
+      let billListRes = await collection.doc(event._id).get()
+      if(billListRes && billListRes.data) {
+        billData = billListRes.data
       }
     }
     const newBill = {
@@ -42,6 +45,7 @@ exports.main = async (event, context) => {
         }
       })
     const _id = event._id || res._id
+    await setAccountProperty(newBill, billData)
     return {
       success: true,
       data: _id
@@ -52,5 +56,17 @@ exports.main = async (event, context) => {
       errMsg: err,
       success: false,
     }
+  }
+
+  async function setAccountProperty (newBill, oldBill ) {
+    let diffAmount = 0
+    if(oldBill.account_id) {
+      const oldAccountRes = await accountCollection.doc(oldBill.account_id).get()
+      const oldAccountData = oldAccountRes.data
+      await accountCollection.doc(oldBill.account_id).update({data:{ property: oldAccountData.property-oldBill.amount }})
+    }
+    const newAccountRes = await accountCollection.doc(newBill.account_id).get()
+    const newAccountData = newAccountRes.data
+    await accountCollection.doc(newBill.account_id).update({data:{ property: newAccountData.property+newBill.amount }})
   }
 }

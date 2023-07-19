@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import Taro from "@tarojs/taro";
 import { Component } from 'react'
-import { View, Image } from '@tarojs/components'
+import { View, Image, Text } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { routerGoIn } from '@/utils/router'
 import { MyPage, MyIcon } from '@/components'
@@ -15,7 +15,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      accountDetail: [],
+      accountsDetail: [],
     }
   }
 
@@ -23,13 +23,15 @@ export default class Home extends Component {
     this.fetchData()
     Taro.eventCenter.on('accountList:refresh', this.refreshData)
     Taro.eventCenter.on('removeBill:success', this.refreshData)
+    Taro.eventCenter.on('addBill:success', this.refreshData)
   }
 
   componentDidMount () { }
 
   componentWillUnmount () {
     Taro.eventCenter.off('accountList:refresh', this.refreshData)
-    Taro.eventCenter.on('removeBill:success', this.refreshData)
+    Taro.eventCenter.off('removeBill:success', this.refreshData)
+    Taro.eventCenter.off('addBill:success', this.refreshData)
   }
 
   componentDidShow () { }
@@ -41,8 +43,7 @@ export default class Home extends Component {
     
     const res = await AccountStore.getAccountList()
     if (res && res.success) {
-      let accountDetail = res.data
-      this.setState({ accountDetail })
+      this.setState({ accountsDetail: res.data })
     }
   }
 
@@ -54,11 +55,18 @@ export default class Home extends Component {
     routerGoIn(`/pages/addAccount/addAccount`);
   }
 
+  handelClick = (item) => {
+    routerGoIn(`/pages/addAccount/addAccount?account_id=${item && item._id}`);
+  }
+
   render () {
-    const { accountDetail } = this.state
+    const { accountsDetail } = this.state
     const header = <View>
       账户资产
     </View>
+
+    const totalAssets = accountsDetail && accountsDetail.filter(e=>e.property>0).reduce((x,y)=>x+(+y.property),0)
+    const totalLiabilities = accountsDetail && accountsDetail.filter(e=>e.property<0).reduce((x,y)=>x+(+y.property),0)
 
     return (
       <MyPage
@@ -70,28 +78,29 @@ export default class Home extends Component {
         <View className='account-title'>
           <View className='account-title-balance'>
             <View>净资产(元)</View>
-            <View className='balance-num'>{12}</View>
+            <View className='balance-num'>{totalAssets+totalLiabilities}</View>
           </View>
           <View className='account-sum'>
             <View className='account-outcome'>
               <View>总资产(元)</View>
-              <View className='outcome-num'>{12}</View>
+              <View className='outcome-num'>{totalAssets}</View>
             </View>
             <View className='account-income'>
               <View>总负债(元)</View>
-              <View className='income-num'>{12}</View>
+              <View className='income-num'>{-totalLiabilities}</View>
             </View>
           </View>
         </View>
         <View className='account-list'>
           <View className='account-item'>我的账户</View>
-          {accountDetail && !!accountDetail.length && accountDetail.map((item, index) => <View
+          {accountsDetail && !!accountsDetail.length && accountsDetail.map((item, index) => <View
             key={index}
             onClick={() => this.handelClick(item)}
             className='account-item'
           >
             <Image src={item.account_img || DEFAULT_ACCOUNT_BOOK_BG}></Image>
-            {item.name}
+            <Text className='account-name'>{item.name}</Text>
+            <Text className='account-property'>{item.property}</Text>
           </View>)}
           <View
             className='account-add'

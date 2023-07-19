@@ -1,4 +1,4 @@
-import Taro from "@tarojs/taro";
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Button, Image } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
@@ -21,9 +21,13 @@ export default class addAccount extends Component {
     };
   }
 
-  componentWillMount () { }
+  componentWillMount () {
+    const { router } = getCurrentInstance()
+    this.account_id = router?.params?.account_id
+  }
 
   componentDidMount () {
+    this.fetchData()
   }
 
   componentWillUnmount () { }
@@ -31,6 +35,19 @@ export default class addAccount extends Component {
   componentDidShow () { }
 
   componentDidHide () { }
+
+  fetchData = async () => {
+    const { AccountStore } = this.props
+    const res = await AccountStore.getAccountDetail({account_id: this.account_id})
+    if(res && res.success && res.data) {
+      const { account_img, name, property } = res.data
+      this.setState({
+        accountBg: account_img,
+        name,
+        property,
+      })
+    }
+  }
 
   saveAccountBook = async () => {
     const { AccountStore } = this.props
@@ -46,6 +63,9 @@ export default class addAccount extends Component {
       account_img: accountBg,
       name,
       property,
+    }
+    if(this.account_id) {
+      params.account_id = this.account_id
     }
     let res = await AccountStore.editAccount(params)
     if(res && res.success) {
@@ -79,7 +99,7 @@ export default class addAccount extends Component {
       <View className='addAccount'>
         <MyPage
           canGoBack
-          titleContent='添加账本'
+          titleContent={this.account_id ? '修改账本' : '添加账本'}
         >
           <View>
             <View className='edit_content'>
