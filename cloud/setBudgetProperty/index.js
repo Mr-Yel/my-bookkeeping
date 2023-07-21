@@ -27,6 +27,25 @@ exports.main = async (event, context) => {
     }
     const collection = db.collection('budget')
     const res = await collection.doc(budget_id).update({data: {property: property}})
+
+    const baseCollection = db.collection('budget_base')
+
+    const baseGetRes = await baseCollection.where({openid: openid}).get()
+
+    if(baseGetRes && baseGetRes.data && baseGetRes.data.length) {
+      // 存在，修改
+      await baseCollection.where({openid: openid}).update({data: {property: property}})
+    } else {
+      // 不存在，新建
+      await baseCollection.add({
+        data : {
+          account_book_id: event.account_book_id,
+          openid: openid,
+          property: property
+        }
+      })
+    }
+
     return {
       success: true,
       data: res

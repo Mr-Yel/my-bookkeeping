@@ -61,6 +61,15 @@
   end_date 必填 Date
 }
 ```
+### 预算基础表 budget_base
+```js
+{
+  _id (主键) String 唯一key,
+  account_book_id 必填 String 关联账本,
+  openid 必填 String 关联用户,
+  property 必填 String 用户基础预算，每次新建的时候用于填入，在修改预算的时候会被同步修改，
+}
+```
 ### 账单类型中间表 users_or_account_book_bill_types
 ```js
 {

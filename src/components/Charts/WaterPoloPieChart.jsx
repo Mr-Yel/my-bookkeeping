@@ -5,7 +5,7 @@ import { unifyNumber } from "../../utils"
 
 function setChartData (chart, all = 0, use = 0) {
 
-  let proportion = all ? unifyNumber(use/all*100) + '%' : '0%'
+  let proportion = all ? unifyNumber(use/all*100) + '%' : use ? '100%' : '0%'
 
   let option = {
     //标题
@@ -64,7 +64,7 @@ function setChartData (chart, all = 0, use = 0) {
         {
           //画剩余的刻度圆环
           name: '',
-          value: all-use,
+          value: all-use < 0 ? 0 : use ? all-use : 1,
           itemStyle: {
             color: 'rgba(255,255,255,0)',
           },
