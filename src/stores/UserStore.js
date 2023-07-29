@@ -19,7 +19,7 @@ const UserStore = observable({
     // this.testFn()
 
     storage
-      .get('userInfo')
+      .get('userInfo:1')
       .then((res) => {
         this.userInfo = res
         callback && callback()

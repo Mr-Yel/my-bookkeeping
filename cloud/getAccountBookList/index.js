@@ -17,7 +17,7 @@ exports.main = async (event, context) => {
     console.log('openid',openid);
     const userAccountBookRes = await userAccountBookCollection
       .where({
-        open_id: openid
+        openid: openid
       })
       .get();
       console.log('userAccountBookRes',userAccountBookRes);
@@ -74,7 +74,7 @@ const newAccountBookUser = async (openid) => {
     const newUserAccountBook = {
       account_book_id: accountBookAddRes._id,
       is_cur_account_book: true,
-      open_id: openid,
+      openid: openid,
     }
     const userAccountBookAddRes = await userAccountBookCollection.add({
       data: {

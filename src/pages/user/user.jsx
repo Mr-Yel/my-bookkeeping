@@ -31,6 +31,13 @@ export default class User extends Component {
     routerGoIn(`/pages/budgetEdit/budgetEdit`)
   }
 
+  warnToast = () => {
+    Taro.showToast({
+      title: '待开发功能，尽情期待',
+      icon: 'none',
+    })
+  }
+
   render() {
     const {
       UserStore: { userInfo }
@@ -59,6 +66,10 @@ export default class User extends Component {
           <view className='function-list-item' onClick={this.goBudgetEdit}>
             <MyIcon name='budget-1'></MyIcon>
             <Text className='function-list-name'>预算管理</Text>
+          </view>
+          <view className='function-list-item' onClick={this.warnToast}>
+            <MyIcon name='contact-1'></MyIcon>
+            <Text className='function-list-name'>联系作者</Text>
           </view>
         </view>
       </view>

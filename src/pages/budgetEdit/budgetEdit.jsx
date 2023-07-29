@@ -13,7 +13,7 @@ export default class budgetEdit extends Component {
   constructor(props) {
     super(props);
 
-    this.curTime = dayjs('2023-08-06')
+    this.curTime = dayjs()
 
     this.state = {
       billDetails: new Array(4).fill(undefined),

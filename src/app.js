@@ -29,12 +29,13 @@ class App extends Component {
   componentDidHide () {}
 
   async init (callback) {
-    await UserStore.getUserInfo()
-    await AccountStore.getAccountBookList()  // 获取用户账本列表
-    Promise.all[AccountStore.getAccountList()]  
-      // 获取用户账单 // 获取用户账户列表
-    UserStore.getSysInfo()
-    callback()
+    await UserStore.getUserInfo(async ()=>{
+      await AccountStore.getAccountBookList()  // 获取用户账本列表
+      Promise.all[AccountStore.getAccountList()]  
+        // 获取用户账单 // 获取用户账户列表
+      UserStore.getSysInfo()
+      callback()
+    })
   }
 
   render () {

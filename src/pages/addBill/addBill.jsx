@@ -155,7 +155,7 @@ export default class addBill extends Component {
                 <View key={item._id} className='amount-type-item' onClick={() => this.billTypeOnClick(item)}>
                   <View
                     className={`amount-type-icon ${item._id == this.curBillType._id ? 'active' : ''}`}
-                    style={`backgroundColor: ${item._id == this.curBillType._id ? item.bill_type_color : '#FFF'}`}
+                    style={`backgroundColor: ${item._id == this.curBillType._id ? item.bill_type_color || '#5FAB87' : '#FFF'}`}
                   >
                     <MyIcon name={item.bill_type_icon}></MyIcon>
                   </View>

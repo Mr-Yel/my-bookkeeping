@@ -34,14 +34,14 @@ exports.main = async (event, context) => {
 
     if(baseGetRes && baseGetRes.data && baseGetRes.data.length) {
       // 存在，修改
-      await baseCollection.where({openid: openid}).update({data: {property: property}})
+      await baseCollection.where({openid: openid}).update({data: {property: +property}})
     } else {
       // 不存在，新建
       await baseCollection.add({
         data : {
           account_book_id: event.account_book_id,
           openid: openid,
-          property: property
+          property: +property
         }
       })
     }
