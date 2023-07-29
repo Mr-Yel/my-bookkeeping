@@ -10,7 +10,7 @@ function setChartData (chart, all = 0, use = 0) {
   let option = {
     //标题
     title: {
-      top: "45%",
+      top: "43%",
       left: "center",
       text: proportion,
       textStyle: {
