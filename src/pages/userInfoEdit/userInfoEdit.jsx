@@ -103,7 +103,6 @@ export default class userInfoEdit extends Component {
             open={openNameEdit}
             title='更换昵称'
             content={<Input
-              focus
               value={copyName}
               className='mark-edit-name-input'
               type='text'
