@@ -29,13 +29,17 @@ export default class addBill extends Component {
       iconList: [
         { icon: 'restaurant', name: '餐饮' },
         { icon: 'renting_house-1', name: '租房' },
+        { icon: 'wages', name: '工资' },
         { icon: 'hydropower-1', name: '水电' },
         { icon: 'shopping-1', name: '购物' },
         { icon: 'fruit-1', name: '水果' },
         { icon: 'red_envelope-1', name: '红包' },
         { icon: 'pet-1', name: '宠物' },
         { icon: 'entertainment-1', name: '娱乐' },
-        { icon: 'wages', name: '工资' }
+        { icon: 'refund-1', name: '退款' },
+        { icon: 'life-1', name: '生活' },
+        { icon: 'sport-1', name: '运动健身' },
+        { icon: 'other-1', name: '其他' }
       ]
     }
   }
@@ -176,7 +180,7 @@ export default class addBill extends Component {
           <View className='content'>
             <View className='name-edit block'>
               <View className='first-line'>
-                <View className='name-edit-icon' style={{ backgroundColor: `${category.color}` }}>
+                <View className='name-edit-icon' style={{ backgroundColor: `${category.color || '#5FAB87'}` }}>
                   <View style={{ paddingLeft: '18rpx', paddingTop: '8rpx' }}>
                     <MyIcon name={category.icon}></MyIcon>
                   </View>
