@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text, Image, Button } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { DEFAULT_HEADER } from '../../config'
 import { MyPage, MyIcon } from '../../components'
@@ -32,10 +32,15 @@ export default class User extends Component {
   }
 
   warnToast = () => {
-    Taro.showToast({
-      title: '待开发功能，尽情期待',
-      icon: 'none',
-    })
+    // Taro.showToast({
+    //   title: '待开发功能，尽情期待',
+    //   icon: 'none',
+    // })
+    wx.openCustomerServiceConversation({});
+  }
+
+  handleContact = (e) => {
+    console.log(e);
   }
 
   render() {
@@ -52,27 +57,36 @@ export default class User extends Component {
         </View>
       </View>
     )
+
+    const alertText = '目前为测试版本，数据随时可能会删除，如果需要长久保存请联系作者。'
+
+    const textRunTime = Math.floor(alertText.length/5)
+
     const customFunctionContent = (
-      <view className='function-bar'>
-        <view className='function-title-bar'>
-          <Text className='function-title-bar-title'>功能服务</Text>
-          <Text className='function-title-bar-tips'>这是一条提示</Text>
-        </view>
-        <view className='function-list'>
-          <view className='function-list-item' onClick={this.goCategory}>
+      <View className='function-bar'>
+        <View className='function-title-bar'>
+          <View className='function-title-bar-title'>提示：</View>
+          <View className='function-title-bar-tips'>
+            <Text style={{animationDuration: `${textRunTime}s`}}>{alertText}</Text>
+          </View>
+        </View>
+        <View className='function-list'>
+          <View className='function-list-item' onClick={this.goCategory}>
             <MyIcon name='yingyong'></MyIcon>
             <Text className='function-list-name'>分类管理</Text>
-          </view>
-          <view className='function-list-item' onClick={this.goBudgetEdit}>
+          </View>
+          <View className='function-list-item' onClick={this.goBudgetEdit}>
             <MyIcon name='budget-1'></MyIcon>
             <Text className='function-list-name'>预算管理</Text>
-          </view>
-          <view className='function-list-item' onClick={this.warnToast}>
-            <MyIcon name='contact-1'></MyIcon>
-            <Text className='function-list-name'>联系作者</Text>
-          </view>
-        </view>
-      </view>
+          </View>
+          <View className='function-list-item'>
+            <Button openType='contact' bindcontact={this.handleContact}></Button>
+            <MyIcon name='contact-2'></MyIcon>
+            <Text className='function-list-name'>联系客服</Text>
+          </View>
+         
+        </View>
+      </View>
     )
 
     return (

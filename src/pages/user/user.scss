@@ -49,13 +49,38 @@
     width: 100%;
     padding: 12px;
     border-bottom: 2rpx solid #e8e8e8;
+    display: flex;
     &-title {
+      flex-shrink: 0;
       font-weight: 700;
     }
         
     &-tips {
       padding-left: 12px;
+      margin-right: 12px;
       color: #888888;
+      overflow: hidden;
+      Text {
+        position: relative;
+        white-space: nowrap;
+        /* 应用动画 */
+        animation-name: text_roll;
+        /* 指定动画名称 */
+        animation-duration: 5s;
+        /* 动画持续时间 */
+        // animation-fill-mode: forwards;
+        /* 动画填充模式，forwards把动画停在最后一个 */
+        animation-iteration-count: infinite;
+        /* 动画的执行次数  infinite 表示无数次。 */
+        // animation-delay: 2s;
+        /* 动画延迟时间  当值为负数时动画已经开始了多长时间*/
+        animation-timing-function: linear;
+        // 贝塞尔曲线，默认值是ease,表示动画以低速开始，然后加速，最后在结束前变慢。 最常用的值有以下几个：
+        // （1）linear:表示动画从头到尾的速度都是相同的。
+        // （2）ease-in:表示动画以低速开始。
+        // （3）ease-out:表示动画以低速结束。
+        // （4）ease-in-out:表示动画以低速开始和结束。
+      }
     }
   }
   .function-list{
@@ -72,6 +97,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      position: relative;
+      Button {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+      }
     }
     &-name{
       color: #666666;
@@ -83,4 +117,23 @@
   .function-title-bar-title {
     padding: 0 20px;
   }
+
+  @keyframes text_roll {
+    0% {
+      left: 0%;
+    }
+    10% {
+      left: 0%;
+    }
+    40% {
+      left: -60%;
+    }
+    90% {
+      left: -120%;
+    }
+    100% {
+      left: -120%;
+    }
+  }
+
 }
