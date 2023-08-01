@@ -155,6 +155,7 @@ export default class budgetEdit extends Component {
             open={openBudgetEdit}
             title='设置预算'
             content={<Input
+              focus={openBudgetEdit}
               value={cloneProperty}
               className='mark-edit-name-input'
               type='number'
