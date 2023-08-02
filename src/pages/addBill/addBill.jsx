@@ -28,10 +28,11 @@ export default class addBill extends Component {
   componentWillMount() {
     const { router } = getCurrentInstance()
     this.id = router?.params?.id
+    this.bill_type = router?.params?.bill_type
   }
 
   componentDidMount() {
-    this.fetchData()
+    this.fetchData(this.bill_type)
     if(this.id) {
       this.setDefaultData()
     }
@@ -113,9 +114,17 @@ export default class addBill extends Component {
     const {
       BillStore,
     } = this.props
+    const amount = data && data.amount || 0
+    if(!amount) {
+      Taro.showToast({
+        title: '金额不能为0',
+        icon: 'error'
+      })
+      return
+    }
     const params = {
       notes: (data && data.notes) || '',
-      amount: (data && data.amount) || 0,
+      amount: this.curBillType && this.curBillType.bill_type=='out' ? -amount : amount,
       bill_type_id: this.curBillType._id,
       date_time: dayjs(data.date + data.time).format('YYYYMMDDHHmmss'),
       account_id: data.curAccount._id
@@ -139,9 +148,9 @@ export default class addBill extends Component {
         <View className='tabs-item' onClick={() => this.changeBillType('in')}>
           收入
         </View>
-        <View className='tabs-item' onClick={() => this.changeBillType('in')}>
+        {/* <View className='tabs-item' onClick={() => this.changeBillType('in')}>
           转账
-        </View>
+        </View> */}
       </View>
     )
     return (

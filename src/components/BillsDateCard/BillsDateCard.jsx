@@ -54,16 +54,23 @@ export default class BillsDateCard extends Component {
     }
   }
 
-  openActionSheet = async (bill_id) => {
+  openActionSheet = async (item) => {
+    const { _id, bill_type } = item
+    if (!_id || !bill_type) {
+      Taro.showToast({
+        title: '异常数据，请联系管理员',
+        icon: 'none'
+      })
+    }
     Taro.showActionSheet({
       itemList: ['编辑账单', '删除账单'],
       success: async (res) => {
         switch (res.tapIndex) {
           case 0:
-            routerGoIn(`/pages/addBill/addBill?id=${bill_id}`)
+            routerGoIn(`/pages/addBill/addBill?id=${_id}&bill_type=${bill_type}`)
             break
           case 1:
-            this.removeBill(bill_id)
+            this.removeBill(_id)
             break
         }
       },
@@ -89,7 +96,7 @@ export default class BillsDateCard extends Component {
         {billCardList &&
           !!billCardList.length &&
           billCardList.map((item, index) => (
-            <View key={index} className='bill-card-item' onClick={() => this.openActionSheet(item._id)}>
+            <View key={index} className='bill-card-item' onClick={() => this.openActionSheet(item)}>
               <View className='bill-card-icon' style={`backgroundColor: ${item.bill_type_color}`}>
                 <MyIcon name={item.bill_type_icon}></MyIcon>
               </View>

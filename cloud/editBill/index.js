@@ -63,7 +63,8 @@ exports.main = async (event, context) => {
     if(oldBill.account_id) {
       const oldAccountRes = await accountCollection.doc(oldBill.account_id).get()
       const oldAccountData = oldAccountRes.data
-      await accountCollection.doc(oldBill.account_id).update({data:{ property: oldAccountData.property-oldBill.amount }})
+      await accountCollection.doc(oldBill.account_id).update({data:{ property: oldAccountData.property+newBill.amount-oldBill.amount }})
+      return
     }
     const newAccountRes = await accountCollection.doc(newBill.account_id).get()
     const newAccountData = newAccountRes.data

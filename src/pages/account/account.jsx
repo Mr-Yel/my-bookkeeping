@@ -1,11 +1,9 @@
-import dayjs from 'dayjs'
 import Taro from "@tarojs/taro";
 import { Component } from 'react'
 import { View, Image, Text } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { routerGoIn } from '@/utils/router'
 import { MyPage, MyIcon } from '@/components'
-import { AmountType } from '@/enum'
 import { DEFAULT_ACCOUNT_BOOK_BG } from '@/config'
 
 @inject('AccountStore')
@@ -14,13 +12,11 @@ export default class Home extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      accountsDetail: [],
-    }
+    this.state = { }
   }
 
   componentWillMount () {
-    this.fetchData()
+    // this.fetchData()
     Taro.eventCenter.on('accountList:refresh', this.refreshData)
     Taro.eventCenter.on('removeBill:success', this.refreshData)
     Taro.eventCenter.on('addBill:success', this.refreshData)
@@ -40,11 +36,7 @@ export default class Home extends Component {
 
   fetchData = async () => {
     const { AccountStore } = this.props
-    
-    const res = await AccountStore.getAccountList()
-    if (res && res.success) {
-      this.setState({ accountsDetail: res.data })
-    }
+    await AccountStore.getAccountList()
   }
 
   refreshData = () => {
@@ -60,13 +52,13 @@ export default class Home extends Component {
   }
 
   render () {
-    const { accountsDetail } = this.state
+    const { AccountStore: { accounts } } = this.props
     const header = <View>
       账户资产
     </View>
 
-    const totalAssets = accountsDetail && accountsDetail.filter(e=>e.property>0).reduce((x,y)=>x+(+y.property),0)
-    const totalLiabilities = accountsDetail && accountsDetail.filter(e=>e.property<0).reduce((x,y)=>x+(+y.property),0)
+    const totalAssets = accounts && accounts.filter(e=>e.property>0).reduce((x,y)=>x+(+y.property),0)
+    const totalLiabilities = accounts && accounts.filter(e=>e.property<0).reduce((x,y)=>x+(+y.property),0)
 
     return (
       <MyPage
@@ -93,7 +85,7 @@ export default class Home extends Component {
         </View>
         <View className='account-list'>
           <View className='account-item'>我的账户</View>
-          {accountsDetail && !!accountsDetail.length && accountsDetail.map((item, index) => <View
+          {accounts && !!accounts.length && accounts.map((item, index) => <View
             key={index}
             onClick={() => this.handelClick(item)}
             className='account-item'
