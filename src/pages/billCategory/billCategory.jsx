@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { View, Text, MovableArea, MovableView } from '@tarojs/components'
 import { observer, inject } from 'mobx-react'
 import { MyPage, MyIcon } from '@/components'
-import { routerGoIn, routerGoBack } from '@/utils/router'
+import { routerGoIn } from '@/utils/router'
 import billStore from '../../stores/BillStore'
 
 const enumBillType = {
@@ -39,7 +39,7 @@ export default class billCategory extends Component {
       },
       pageInfo: {
         rowHeight: 64,
-        scrollHeight: 100,
+        scrollHeight: 85,
         startIndex: null,
         scrollY: true,
         readyPlaceIndex: null,
@@ -116,7 +116,7 @@ export default class billCategory extends Component {
     movableViewInfo.bill_type_color = list[activeTab][startIndex].bill_type_color
     movableViewInfo.showClass = 'inline'
     movableViewInfo.y = pageInfo.startY - pageInfo.rowHeight / 2
-    // console.log(movableViewInfo, pageInfo)
+    console.log(movableViewInfo, pageInfo)
 
     this.setState({
       dragFlag: true,
@@ -430,6 +430,7 @@ export default class billCategory extends Component {
             <MovableView
               y={movableViewInfo.y - 96}
               outOfBounds
+              damping={999}
               direction='vertical'
               className='billCategory-list-item-move'
               style={{ height: `${pageInfo.rowHeight}px` }}

@@ -1,6 +1,4 @@
 .billCategory{
-    width: 100%;
-    height: 100%;
     box-sizing: border-box;
     .MyContent{
       padding: 24px;
@@ -23,8 +21,8 @@
       background-color: #CCCCCC
     }
     &-list{
+      height: 100%;
       position: relative;
-      margin: auto;
       background-color: #fff;
       border-radius: 12px;
       padding: 12px;
